@@ -7,12 +7,14 @@ public class PastPaperRepository : IPastPaperRepository
     private readonly List<PastPapers> _papers = new();
     public Task<bool> CreatePaspaperAsync(PastPapers pastPapers)
     {
-        throw new NotImplementedException();
+        _papers.Add(pastPapers);
+        return Task.FromResult(true);
     }
 
     public Task<PastPapers?> GetPastPaperByIdAsync(Guid pastPaperId)
     {
-        throw new NotImplementedException();
+        var pastPaper = _papers.SingleOrDefault(x => x.PastPaperId == pastPaperId);
+        return Task.FromResult(pastPaper);
     }
 
     public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
