@@ -24,11 +24,26 @@ public class PastPaperRepository : IPastPaperRepository
 
     public Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
     {
-        throw new NotImplementedException();
+       var pastPaperIndex = _papers.FindIndex(x => x.PastPaperId == pastPapers.PastPaperId);
+
+       if (pastPaperIndex == -1)
+       {
+           return Task.FromResult(false);
+       }
+       
+       _papers[pastPaperIndex] = pastPapers;
+       return Task.FromResult(true);
     }
 
     public Task<bool> DeletePastPaperAsync(Guid pastPaperId)
     {
-        throw new NotImplementedException();
+        var pastPaper = _papers.SingleOrDefault(x => x.PastPaperId == pastPaperId);
+        if (pastPaper == null)
+        {
+            return Task.FromResult(false);
+        }
+
+        _papers.Remove(pastPaper);
+        return Task.FromResult(true);
     }
 }
