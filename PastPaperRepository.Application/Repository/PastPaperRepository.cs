@@ -4,6 +4,7 @@ namespace PastPaperRepository.Application.Repository;
 
 public class PastPaperRepository : IPastPaperRepository
 {
+    private readonly List<PastPapers> _papers = new();
     public Task<bool> CreatePaspaperAsync(PastPapers pastPapers)
     {
         throw new NotImplementedException();
