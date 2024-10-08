@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastPaperRepositoryAPI", "PastPaperRepositoryAPI\PastPaperRepositoryAPI.csproj", "{23C55F52-2E32-45DB-A53B-1A90A2A39A68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastPaperRepository.API", "PastPaperRepository.API\PastPaperRepository.API.csproj", "{23C55F52-2E32-45DB-A53B-1A90A2A39A68}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastPaperRepository.Application", "PastPaperRepository.Application\PastPaperRepository.Application.csproj", "{2DF9CFF7-E378-4607-97A4-8E9E5393EE3D}"
 EndProject
