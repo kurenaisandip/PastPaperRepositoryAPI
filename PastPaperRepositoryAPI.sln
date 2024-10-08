@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastPaperRepositoryAPI", "PastPaperRepositoryAPI\PastPaperRepositoryAPI.csproj", "{23C55F52-2E32-45DB-A53B-1A90A2A39A68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastPaperRepository.Application", "PastPaperRepository.Application\PastPaperRepository.Application.csproj", "{2DF9CFF7-E378-4607-97A4-8E9E5393EE3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PastPaperRepository.Contracts", "PastPaperRepository.Contracts\PastPaperRepository.Contracts.csproj", "{EAED04D5-9CEF-4766-AEF6-4FAB71B3043B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23C55F52-2E32-45DB-A53B-1A90A2A39A68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23C55F52-2E32-45DB-A53B-1A90A2A39A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23C55F52-2E32-45DB-A53B-1A90A2A39A68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23C55F52-2E32-45DB-A53B-1A90A2A39A68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF9CFF7-E378-4607-97A4-8E9E5393EE3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF9CFF7-E378-4607-97A4-8E9E5393EE3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DF9CFF7-E378-4607-97A4-8E9E5393EE3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DF9CFF7-E378-4607-97A4-8E9E5393EE3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAED04D5-9CEF-4766-AEF6-4FAB71B3043B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAED04D5-9CEF-4766-AEF6-4FAB71B3043B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAED04D5-9CEF-4766-AEF6-4FAB71B3043B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAED04D5-9CEF-4766-AEF6-4FAB71B3043B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
