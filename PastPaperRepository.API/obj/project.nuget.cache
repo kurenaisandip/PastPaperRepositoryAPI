@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4euBXjKz470=",
+  "dgSpecHash": "dq7baYY3EJ8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\ACER\\RiderProjects\\PastPaperRepositoryAPI\\PastPaperRepositoryAPI\\PastPaperRepositoryAPI.csproj",
+  "projectFilePath": "C:\\Users\\ACER\\RiderProjects\\PastPaperRepositoryAPI\\PastPaperRepository.API\\PastPaperRepository.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\ACER\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.8\\microsoft.aspnetcore.openapi.8.0.8.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
