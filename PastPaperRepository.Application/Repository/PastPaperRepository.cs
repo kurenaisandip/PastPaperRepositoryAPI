@@ -19,7 +19,7 @@ public class PastPaperRepository : IPastPaperRepository
 
     public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_papers.AsEnumerable());
     }
 
     public Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
