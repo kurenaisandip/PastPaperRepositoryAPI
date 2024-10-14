@@ -4,6 +4,7 @@ using PastPaperRepository.Application.Repository;
 namespace PastPaperRepository.API.Controller;
 
 [ApiController]
+[Route("api")]
 public class PastPaperController : ControllerBase
 {
     private readonly IPastPaperRepository _pastPaperRepository;
