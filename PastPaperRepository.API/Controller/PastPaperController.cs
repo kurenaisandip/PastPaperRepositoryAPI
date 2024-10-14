@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PastPaperRepository.Application.Repository;
+using PastPaperRepository.Contracts.Requests;
 
 namespace PastPaperRepository.API.Controller;
 
@@ -12,6 +13,12 @@ public class PastPaperController : ControllerBase
     public PastPaperController(IPastPaperRepository pastPaperRepository)
     {
         _pastPaperRepository = pastPaperRepository;
+    }
+
+    [HttpPost("createpastpaper")]
+    public async Task<IActionResult> CreatePastPapers([FromBody]CreatePastPaperRequest request)
+    {
+        return Ok(request);
     }
 }
     
