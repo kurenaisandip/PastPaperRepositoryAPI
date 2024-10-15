@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PastPaperRepository.API.Mapping;
 using PastPaperRepository.Application.Models;
 using PastPaperRepository.Application.Repository;
 using PastPaperRepository.Contracts.Requests;
@@ -20,34 +21,11 @@ public class PastPaperController : ControllerBase
     [HttpPost("createpastpaper")]
     public async Task<IActionResult> CreatePastPapers([FromBody]CreatePastPaperRequest request)
     {
-        var pastPaper = new PastPapers()
-        {
-            PastPaperId = Guid.NewGuid(),
-            Title = request.Title,
-            SubjectId = request.SubjectId,
-            CategoryId = request.CategoryId,
-            Year = request.Year,
-            ExamType = request.ExamType,
-            DifficultyLevel = request.DifficultyLevel,
-            ExamBoard = request.ExamBoard,
-            FilePath = request.FilePath
-        };
+        var pastPaper = request.MapToPastPapers();
        await _pastPaperRepository.CreatePaspaperAsync(pastPaper);
         
        // Map the pastPaper object to a response DTO
-       var response = new PastPaperResponse()
-       {
-           PastPaperId = pastPaper.PastPaperId,
-           Title = pastPaper.Title,
-           SubjectId = pastPaper.SubjectId,
-           CategoryId = pastPaper.CategoryId,
-           Year = pastPaper.Year,
-           ExamType = pastPaper.ExamType,
-           DifficultyLevel = pastPaper.DifficultyLevel,
-           ExamBoard = pastPaper.ExamBoard,
-           FilePath = pastPaper.FilePath
-       };
-
+       var response = pastPaper.MapToResponsePastPaper();
        // return Ok(response);
        return Created($"/api/createpastpaper/{response.PastPaperId}", response);
     }
