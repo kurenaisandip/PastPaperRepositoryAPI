@@ -48,7 +48,8 @@ public class PastPaperController : ControllerBase
            FilePath = pastPaper.FilePath
        };
 
-       return Ok(response);
+       // return Ok(response);
+       return Created($"/api/createpastpaper/{response.PastPaperId}", response);
     }
 }
     
