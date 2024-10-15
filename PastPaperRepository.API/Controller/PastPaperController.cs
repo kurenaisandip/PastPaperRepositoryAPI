@@ -8,7 +8,6 @@ using PastPaperRepository.Contracts.Responses;
 namespace PastPaperRepository.API.Controller;
 
 [ApiController]
-[Route("api")]
 public class PastPaperController : ControllerBase
 {
     private readonly IPastPaperRepository _pastPaperRepository;
@@ -18,7 +17,7 @@ public class PastPaperController : ControllerBase
         _pastPaperRepository = pastPaperRepository;
     }
 
-    [HttpPost("createpastpaper")]
+    [HttpPost(ApiEndPoints.PastPaper.Create)]
     public async Task<IActionResult> CreatePastPapers([FromBody]CreatePastPaperRequest request)
     {
         var pastPaper = request.MapToPastPapers();
