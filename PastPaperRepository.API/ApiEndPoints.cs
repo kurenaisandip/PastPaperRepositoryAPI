@@ -9,6 +9,7 @@ public static class ApiEndPoints
      private const string Base = $"{ApiBaseUrl}/createpastpaper";
 
      public const string Create = Base;
+     public const string Get = $"{Base}/{{id:guid}}";
 
     }
 }
