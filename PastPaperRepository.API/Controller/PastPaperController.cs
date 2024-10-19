@@ -73,5 +73,17 @@ public class PastPaperController : ControllerBase
         var response = pastPaper.MapToUpdatedPastPaper();
         return Ok(response);
     }
+
+    [HttpDelete(ApiEndPoints.PastPaper.Delete)]
+    public async Task<IActionResult> DeletePastPaper([FromRoute] Guid id)
+    {
+        var deletedPastPaper = await _pastPaperRepository.DeletePastPaperAsync(id);
+        if (!deletedPastPaper)
+        {
+            return NotFound();
+        }
+
+        return Ok();
+    }
 }
     
