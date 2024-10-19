@@ -28,5 +28,19 @@ public class PastPaperController : ControllerBase
        // return Ok(response);
        return Created($"/api/createpastpaper/{response.PastPaperId}", response);
     }
+
+    [HttpGet(ApiEndPoints.PastPaper.Get)]
+    public async Task<IActionResult> GetPastPaper([FromBody] Guid id)
+    {
+        var pastPaper = await _pastPaperRepository.GetPastPaperByIdAsync(id);
+
+        if (pastPaper is null)
+        {
+            return NotFound();
+        }
+
+        var response = pastPaper.MapToResponsePastPaper();
+        return Ok(response);
+    }
 }
     
