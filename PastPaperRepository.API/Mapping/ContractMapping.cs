@@ -38,4 +38,13 @@ public static class ContractMapping
         };
 
     }
+
+    public static PastPapersResponse MapToPastPapersResponse(this IEnumerable<PastPapers> pastPapers)
+    {
+        return new PastPapersResponse()
+        {
+            PastPapers = pastPapers.Select(p => p.MapToResponsePastPaper())
+        };
+    }
+    
 }
