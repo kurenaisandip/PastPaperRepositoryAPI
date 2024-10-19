@@ -47,4 +47,20 @@ public static class ContractMapping
         };
     }
     
+    public static PastPapers MapToPastPapers(this UpdatePastPaperRequest request, Guid id)
+    {
+        return new PastPapers()
+        {
+            PastPaperId = id,
+            Title = request.Title,
+            SubjectId = request.SubjectId,
+            CategoryId = request.CategoryId,
+            Year = request.Year,
+            ExamType = request.ExamType,
+            DifficultyLevel = request.DifficultyLevel,
+            ExamBoard = request.ExamBoard,
+            FilePath = request.FilePath
+        };
+    }
+    
 }
