@@ -58,5 +58,20 @@ public class PastPaperController : ControllerBase
         
         return Ok(response);
     }
+
+    [HttpPut(ApiEndPoints.PastPaper.Update)]
+    public async Task<IActionResult> UpdatePastPaper([FromRoute] Guid id, [FromBody] UpdatePastPaperRequest request)
+    {
+        var pastPaper = request.MapToPastPapers(id);
+        var updatedPastPaper = await _pastPaperRepository.UpdatePastPaperAsync(pastPaper);
+
+        if (!updatedPastPaper)
+        {
+            return NotFound();
+        }
+        
+        var response = pastPaper.MapToUpdatedPastPaper();
+        return Ok(response);
+    }
 }
     
