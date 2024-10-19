@@ -30,7 +30,7 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpGet(ApiEndPoints.PastPaper.Get)]
-    public async Task<IActionResult> GetPastPaper([FromBody] Guid id)
+    public async Task<IActionResult> GetPastPaper([FromRoute] Guid id)
     {
         var pastPaper = await _pastPaperRepository.GetPastPaperByIdAsync(id);
 
@@ -40,6 +40,21 @@ public class PastPaperController : ControllerBase
         }
 
         var response = pastPaper.MapToResponsePastPaper();
+        return Ok(response);
+    }
+
+    [HttpGet(ApiEndPoints.PastPaper.GetAll)]
+    public async Task<IActionResult> GetAllPastPapers()
+    {
+        var pastPapers = await _pastPaperRepository.GetAllPastPapersAsync();
+
+        if (pastPapers is null)
+        {
+            return NotFound();
+        }
+
+        var response = pastPapers.MapToPastPapersResponse();
+        
         return Ok(response);
     }
 }
