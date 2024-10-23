@@ -70,34 +70,43 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public async Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
+ public async Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
+{
+    using (var connection = await _connectionFactory.CreateConnectionAsync())
     {
-        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        using (var transaction = connection.BeginTransaction())
         {
-            var transaction = connection.BeginTransaction();
-
-            if (!await ExistsById(pastPapers.PastPaperId))
+            try
             {
-                return false;
+                if (!await ExistsById(pastPapers.PastPaperId))
+                {
+                    return false;
+                }
+
+                var result = await connection.ExecuteAsync(new CommandDefinition(@"
+                UPDATE PastPapers
+                SET Title = @Title,
+                    Slug = @Slug,
+                    SubjectId = @SubjectId,
+                    CategoryId = @CategoryId,
+                    Year = @Year,
+                    ExamType = @ExamType,
+                    DifficultyLevel = @DifficultyLevel,
+                    ExamBoard = @ExamBoard,
+                    FilePath = @FilePath
+                WHERE PastPaperId = @PastPaperId", pastPapers, transaction));
+
+                transaction.Commit();
+                return result > 0;
             }
-
-            var result = await connection.ExecuteAsync(new CommandDefinition(@"
-            UPDATE PastPapers
-            SET Title = @Title,
-                Slug = @Slug,
-                SubjectId = @SubjectId,
-                CategoryId = @CategoryId,
-                Year = @Year,
-                ExamType = @ExamType,
-                DifficultyLevel = @DifficultyLevel,
-                ExamBoard = @ExamBoard,
-                FilePath = @FilePath
-            WHERE PastPaperId = @PastPaperId", pastPapers));
-
-            transaction.Commit();
-            return result > 0;
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
         }
     }
+}
 
    public async Task<bool> DeletePastPaperAsync(Guid pastPaperId)
 {
