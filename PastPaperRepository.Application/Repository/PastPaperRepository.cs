@@ -48,9 +48,15 @@ public class PastPaperRepository : IPastPaperRepository
        
     }
 
-    public Task<PastPapers?> GetPastPaperBySlugAsync(string slug)
+    public async Task<PastPapers?> GetPastPaperBySlugAsync(string slug)
     {
-        throw new NotImplementedException();
+        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        {
+            var pastPaper = await connection.QuerySingleOrDefaultAsync<PastPapers>(new CommandDefinition(@"
+                select * from PastPapers where Slug = @slug", new { slug }));
+            
+            return pastPaper;
+        }
     }
 
     public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
