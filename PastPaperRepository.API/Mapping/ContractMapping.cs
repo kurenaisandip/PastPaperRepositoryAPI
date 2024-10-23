@@ -24,10 +24,11 @@ public static class ContractMapping
 
     public static PastPaperResponse MapToResponsePastPaper(this PastPapers pastPaper)
     {
-        return new PastPaperResponse()
+        return new PastPaperResponse
         {
             PastPaperId = pastPaper.PastPaperId,
             Title = pastPaper.Title,
+            Slug = pastPaper.Slug,
             SubjectId = pastPaper.SubjectId,
             CategoryId = pastPaper.CategoryId,
             Year = pastPaper.Year,

@@ -5,6 +5,8 @@ public class PastPaperResponse
     
     public Guid PastPaperId { get; init; }
     public string Title { get; init; }
+    
+    public string Slug { get; init; }
     public int SubjectId { get; init; }
     public int CategoryId { get; init; }
     public int Year { get; init; }
