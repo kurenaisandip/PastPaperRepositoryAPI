@@ -70,9 +70,33 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
+    public async Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
     {
-        throw new NotImplementedException();
+        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        {
+            var transaction = connection.BeginTransaction();
+
+            if (!await ExistsById(pastPapers.PastPaperId))
+            {
+                return false;
+            }
+
+            var result = await connection.ExecuteAsync(new CommandDefinition(@"
+            UPDATE PastPapers
+            SET Title = @Title,
+                Slug = @Slug,
+                SubjectId = @SubjectId,
+                CategoryId = @CategoryId,
+                Year = @Year,
+                ExamType = @ExamType,
+                DifficultyLevel = @DifficultyLevel,
+                ExamBoard = @ExamBoard,
+                FilePath = @FilePath
+            WHERE PastPaperId = @PastPaperId", pastPapers));
+
+            transaction.Commit();
+            return result > 0;
+        }
     }
 
     public Task<bool> DeletePastPaperAsync(Guid pastPaperId)
@@ -80,8 +104,14 @@ public class PastPaperRepository : IPastPaperRepository
         throw new NotImplementedException();
     }
 
-    public Task<bool> ExistsById(Guid pastPaperId)
+    public async Task<bool> ExistsById(Guid pastPaperId)
     {
-        throw new NotImplementedException();
+        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        {
+            var pastPaper = await connection.ExecuteScalarAsync<bool>(new CommandDefinition(@"
+                select count(1) from PastPapers where PastPaperId = @pastPaperId", new { pastPaperId }));
+            
+            return pastPaper;
+        }
     }
 }
