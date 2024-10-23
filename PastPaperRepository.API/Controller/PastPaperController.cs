@@ -27,13 +27,27 @@ public class PastPaperController : ControllerBase
        var response = pastPaper.MapToResponsePastPaper();
        // return Ok(response);
        // return Created($"/api/createpastpaper/{response.PastPaperId}", response);
-       return CreatedAtAction(nameof(GetPastPaper), new { id = response.PastPaperId }, response);
+       return CreatedAtAction(nameof(GetPastPaper), new { idOrSlug = response.PastPaperId }, response);
     }
 
     [HttpGet(ApiEndPoints.PastPaper.Get)]
     public async Task<IActionResult> GetPastPaper([FromRoute] Guid id)
     {
         var pastPaper = await _pastPaperRepository.GetPastPaperByIdAsync(id);
+
+        if (pastPaper is null)
+        {
+            return NotFound();
+        }
+
+        var response = pastPaper.MapToResponsePastPaper();
+        return Ok(response);
+    } 
+    
+    [HttpGet(ApiEndPoints.PastPaper.GetBySlug)]
+    public async Task<IActionResult> GetPastPaper([FromRoute] string idOrSlug)
+    {
+        var pastPaper = Guid.TryParse(idOrSlug, out var id) ? await _pastPaperRepository.GetPastPaperByIdAsync(id) : await _pastPaperRepository.GetPastPaperBySlugAsync(idOrSlug);
 
         if (pastPaper is null)
         {
