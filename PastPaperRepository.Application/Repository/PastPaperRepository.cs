@@ -17,6 +17,12 @@ public class PastPaperRepository : IPastPaperRepository
         return Task.FromResult(pastPaper);
     }
 
+    public Task<PastPapers?> GetPastPaperBySlugAsync(string slug)
+    {
+        var pastPaper = _papers.SingleOrDefault(x => x.Slug == slug);
+        return Task.FromResult(pastPaper);
+    }
+
     public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
     {
         return Task.FromResult(_papers.AsEnumerable());
