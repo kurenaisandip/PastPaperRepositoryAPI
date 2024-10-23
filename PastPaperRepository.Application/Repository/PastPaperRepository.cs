@@ -30,9 +30,22 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public Task<PastPapers?> GetPastPaperByIdAsync(Guid pastPaperId)
+    public async Task<PastPapers?> GetPastPaperByIdAsync(Guid pastPaperId)
     {
-        throw new NotImplementedException();
+        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        {
+            var pastPaper = await connection.QuerySingleOrDefaultAsync<PastPapers>(new CommandDefinition(@"
+                select * from PastPapers where PastPaperId = @PastPaperId", new {pastPaperId}));
+            
+            // if (pastPaper is null)
+            // {
+            //     return null;
+            // }
+
+            return pastPaper;  // this will return null if the pastPaper is null
+        }
+
+       
     }
 
     public Task<PastPapers?> GetPastPaperBySlugAsync(string slug)
