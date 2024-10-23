@@ -99,10 +99,33 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public Task<bool> DeletePastPaperAsync(Guid pastPaperId)
+   public async Task<bool> DeletePastPaperAsync(Guid pastPaperId)
+{
+    using (var connection = await _connectionFactory.CreateConnectionAsync())
     {
-        throw new NotImplementedException();
+        using (var transaction = connection.BeginTransaction())
+        {
+            try
+            {
+                if (!await ExistsById(pastPaperId))
+                {
+                    return false;
+                }
+
+                var result = await connection.ExecuteAsync(new CommandDefinition(@"
+                    DELETE FROM PastPapers WHERE PastPaperId = @pastPaperId", new { pastPaperId }, transaction));
+
+                transaction.Commit();
+                return result > 0;
+            }
+            catch
+            {
+                transaction.Rollback();
+                throw;
+            }
+        }
     }
+}
 
     public async Task<bool> ExistsById(Guid pastPaperId)
     {
