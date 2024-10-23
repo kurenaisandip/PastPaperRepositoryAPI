@@ -12,4 +12,5 @@ public interface IPastPaperRepository
     
     Task<bool> UpdatePastPaperAsync(PastPapers pastPapers);
     Task<bool> DeletePastPaperAsync(Guid pastPaperId);
+    Task<bool> ExistsById(Guid pastPaperId);
 }

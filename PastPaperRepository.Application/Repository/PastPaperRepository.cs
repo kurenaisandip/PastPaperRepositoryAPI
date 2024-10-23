@@ -1,55 +1,62 @@
-﻿using PastPaperRepository.Application.Models;
+﻿using Dapper;
+using PastPaperRepository.Application.Database;
+using PastPaperRepository.Application.Models;
 
 namespace PastPaperRepository.Application.Repository;
 
 public class PastPaperRepository : IPastPaperRepository
 {
-    private readonly List<PastPapers> _papers = new();
-    public Task<bool> CreatePaspaperAsync(PastPapers pastPapers)
+    private readonly IDbConnectionFactory _connectionFactory;
+
+    public PastPaperRepository(IDbConnectionFactory connectionFactory)
     {
-        _papers.Add(pastPapers);
-        return Task.FromResult(true);
+        _connectionFactory = connectionFactory;
+    }
+
+    //TODOs: Handle the exception for item alerady exists
+    public async Task<bool> CreatePaspaperAsync(PastPapers pastPapers)
+    {
+        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        {
+            var transaction = connection.BeginTransaction();
+
+            var result = await connection.ExecuteAsync(new CommandDefinition("""
+                                                                             insert into PastPapers (PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath)
+                                                                                 values (@PastPaperId, @Title, @Slug, @SubjectId, @CategoryId, @Year, @ExamType, @DifficultyLevel, @ExamBoard, @FilePath)
+                                                                             """, pastPapers));
+
+            transaction.Commit();
+            return result > 0;
+        }
     }
 
     public Task<PastPapers?> GetPastPaperByIdAsync(Guid pastPaperId)
     {
-        var pastPaper = _papers.SingleOrDefault(x => x.PastPaperId == pastPaperId);
-        return Task.FromResult(pastPaper);
+        throw new NotImplementedException();
     }
 
     public Task<PastPapers?> GetPastPaperBySlugAsync(string slug)
     {
-        var pastPaper = _papers.SingleOrDefault(x => x.Slug == slug);
-        return Task.FromResult(pastPaper);
+        throw new NotImplementedException();
     }
 
     public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
     {
-        return Task.FromResult(_papers.AsEnumerable());
+        throw new NotImplementedException();
     }
 
     public Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
     {
-       var pastPaperIndex = _papers.FindIndex(x => x.PastPaperId == pastPapers.PastPaperId);
-
-       if (pastPaperIndex == -1)
-       {
-           return Task.FromResult(false);
-       }
-       
-       _papers[pastPaperIndex] = pastPapers;
-       return Task.FromResult(true);
+        throw new NotImplementedException();
     }
 
     public Task<bool> DeletePastPaperAsync(Guid pastPaperId)
     {
-        var pastPaper = _papers.SingleOrDefault(x => x.PastPaperId == pastPaperId);
-        if (pastPaper == null)
-        {
-            return Task.FromResult(false);
-        }
+        throw new NotImplementedException();
+    }
 
-        _papers.Remove(pastPaper);
-        return Task.FromResult(true);
+    public Task<bool> ExistsById(Guid pastPaperId)
+    {
+        throw new NotImplementedException();
     }
 }
