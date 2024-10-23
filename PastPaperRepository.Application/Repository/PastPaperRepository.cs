@@ -59,9 +59,15 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
+    public async Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
     {
-        throw new NotImplementedException();
+        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        {
+            var pastPapers = await connection.QueryAsync<PastPapers>(new CommandDefinition(@"
+                select * from PastPapers "));
+            
+            return pastPapers;
+        }
     }
 
     public Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
