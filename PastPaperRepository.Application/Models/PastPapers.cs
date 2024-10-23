@@ -2,7 +2,7 @@
 
 namespace PastPaperRepository.Application.Models;
 
-public class PastPapers
+public partial class PastPapers
 {
     public Guid PastPaperId { get; init; }
     public string Title { get; set; }
@@ -19,10 +19,13 @@ public class PastPapers
     private string generateSlug()
     {
         // var slugTitle = Regex.Replace(Title, "[^a-zA-Z0-9]", String.Empty).ToLower().Replace("", "-");
-        var slugTitle = Regex.Replace(Title, "[^a-zA-Z0-9 ]", String.Empty)  // Remove non-alphanumeric characters except spaces
+        var slugTitle = SlugRegex().Replace(Title, String.Empty)  // Remove non-alphanumeric characters except spaces
             .Trim()  // Remove leading and trailing whitespace
             .Replace(" ", "-")  // Replace spaces with dashes
             .ToLower();  // Convert to lowercase
         return $"{slugTitle}-{Year}";
     }
+
+    [GeneratedRegex("[^a-zA-Z0-9 ]", RegexOptions.NonBacktracking, 5)]
+    private static partial Regex SlugRegex();
 }
