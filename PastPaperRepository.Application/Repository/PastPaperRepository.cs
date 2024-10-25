@@ -19,6 +19,9 @@ public class PastPaperRepository : IPastPaperRepository
         using (var connection = await _connectionFactory.CreateConnectionAsync())
         {
             var transaction = connection.BeginTransaction();
+            
+            pastPapers.PastPaperId = Guid.NewGuid().ToString();
+            Console.WriteLine(pastPapers.PastPaperId);
 
             var result = await connection.ExecuteAsync(new CommandDefinition("""
                                                                              insert into PastPapers (PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath)
@@ -30,7 +33,7 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public async Task<PastPapers?> GetPastPaperByIdAsync(Guid pastPaperId)
+    public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId)
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync())
         {
@@ -63,8 +66,9 @@ public class PastPaperRepository : IPastPaperRepository
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync())
         {
-            var pastPapers = await connection.QueryAsync<PastPapers>(new CommandDefinition(@"
-                select * from PastPapers "));
+            var pastPapers = await connection.QueryAsync<PastPapers>(@"
+            SELECT PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath 
+            FROM PastPapers");
             
             return pastPapers;
         }
@@ -108,7 +112,7 @@ public class PastPaperRepository : IPastPaperRepository
     }
 }
 
-   public async Task<bool> DeletePastPaperAsync(Guid pastPaperId)
+   public async Task<bool> DeletePastPaperAsync(string pastPaperId)
 {
     using (var connection = await _connectionFactory.CreateConnectionAsync())
     {
@@ -136,7 +140,7 @@ public class PastPaperRepository : IPastPaperRepository
     }
 }
 
-    public async Task<bool> ExistsById(Guid pastPaperId)
+    public async Task<bool> ExistsById(string pastPaperId)
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync())
         {

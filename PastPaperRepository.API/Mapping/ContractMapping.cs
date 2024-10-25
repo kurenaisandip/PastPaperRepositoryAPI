@@ -10,7 +10,7 @@ public static class ContractMapping
     {
         return new PastPapers()
         {
-            PastPaperId = Guid.NewGuid(),
+            PastPaperId = Guid.NewGuid().ToString(),
             Title = request.Title,
             SubjectId = request.SubjectId,
             CategoryId = request.CategoryId,
@@ -48,7 +48,7 @@ public static class ContractMapping
         };
     }
     
-    public static PastPapers MapToPastPapers(this UpdatePastPaperRequest request, Guid id)
+    public static PastPapers MapToPastPapers(this UpdatePastPaperRequest request, string id)
     {
         return new PastPapers()
         {

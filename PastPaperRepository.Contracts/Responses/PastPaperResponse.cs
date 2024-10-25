@@ -3,7 +3,7 @@
 public class PastPaperResponse
 {
     
-    public Guid PastPaperId { get; init; }
+    public string PastPaperId { get; init; }
     public string Title { get; init; }
     
     public string Slug { get; init; }

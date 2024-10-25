@@ -4,7 +4,7 @@ namespace PastPaperRepository.Application.Models;
 
 public partial class PastPapers
 {
-    public Guid PastPaperId { get; init; }
+    public string PastPaperId { get; set; }
     public string Title { get; set; }
 
     public string Slug => generateSlug();

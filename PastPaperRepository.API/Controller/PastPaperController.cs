@@ -31,7 +31,7 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpGet(ApiEndPoints.PastPaper.Get)]
-    public async Task<IActionResult> GetPastPaper([FromRoute] Guid id)
+    public async Task<IActionResult> GetPastPaper([FromRoute] string id)
     {
         var pastPaper = await _pastPaperRepository.GetPastPaperByIdAsync(id);
 
@@ -45,10 +45,13 @@ public class PastPaperController : ControllerBase
     } 
     
     [HttpGet(ApiEndPoints.PastPaper.GetBySlug)]
-    public async Task<IActionResult> GetPastPaper([FromRoute] string idOrSlug)
+    public async Task<IActionResult> GetPastPaperBySlug([FromRoute] string idOrSlug)
     {
-        var pastPaper = Guid.TryParse(idOrSlug, out var id) ? await _pastPaperRepository.GetPastPaperByIdAsync(id) : await _pastPaperRepository.GetPastPaperBySlugAsync(idOrSlug);
-
+        // var pastPaper = Guid.TryParse(idOrSlug, out var id) ? await _pastPaperRepository.GetPastPaperByIdAsync(id) : await _pastPaperRepository.GetPastPaperBySlugAsync(idOrSlug);
+        // var pastPaper = Guid.TryParse(idOrSlug, out var id) ? await _pastPaperRepository.GetPastPaperByIdAsync(id) : await _pastPaperRepository.GetPastPaperBySlugAsync(idOrSlug);
+        
+          var pastPaper =  await _pastPaperRepository.GetPastPaperBySlugAsync(idOrSlug);
+        
         if (pastPaper is null)
         {
             return NotFound();
@@ -74,7 +77,7 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpPut(ApiEndPoints.PastPaper.Update)]
-    public async Task<IActionResult> UpdatePastPaper([FromRoute] Guid id, [FromBody] UpdatePastPaperRequest request)
+    public async Task<IActionResult> UpdatePastPaper([FromRoute] string id, [FromBody] UpdatePastPaperRequest request)
     {
         var pastPaper = request.MapToPastPapers(id);
         var updatedPastPaper = await _pastPaperRepository.UpdatePastPaperAsync(pastPaper);
@@ -89,7 +92,7 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpDelete(ApiEndPoints.PastPaper.Delete)]
-    public async Task<IActionResult> DeletePastPaper([FromRoute] Guid id)
+    public async Task<IActionResult> DeletePastPaper([FromRoute] string id)
     {
         var deletedPastPaper = await _pastPaperRepository.DeletePastPaperAsync(id);
         if (!deletedPastPaper)

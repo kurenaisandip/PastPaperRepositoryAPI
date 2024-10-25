@@ -2,7 +2,7 @@
 
 public class UpdatePastPaperResponse
 {
-        public Guid PastPaperId { get; init; }
+        public string PastPaperId { get; init; }
         public string Title { get; init; }
         public int SubjectId { get; init; }
         public int CategoryId { get; init; }
