@@ -1,3 +1,4 @@
+using PastPaperRepository.API.Mapping;
 using PastPaperRepository.Application.ApplicationService;
 using PastPaperRepository.Application.Database;
 
@@ -26,6 +27,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ValidationMappingMiddleware>();
 
 app.MapControllers();
 
