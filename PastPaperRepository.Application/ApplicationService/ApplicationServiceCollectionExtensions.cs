@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Repositories;
@@ -13,6 +14,7 @@ public static class ApplicationServiceCollectionExtensions
     {
         services.AddSingleton<IPastPaperRepository, Repositories.PastPaperRepository>();
         services.AddSingleton<IPastPaperService, Services.PastPaperService>();
+        services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
         return services;
     }
 
