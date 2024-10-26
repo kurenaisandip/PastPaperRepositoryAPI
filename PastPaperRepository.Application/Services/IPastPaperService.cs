@@ -4,12 +4,12 @@ namespace PastPaperRepository.Application.Services;
 
 public interface IPastPaperService
 {
-    Task<bool> CreatePastPaperAsync(PastPapers pastPapers);
-    Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId);
-    Task<PastPapers?> GetPastPaperBySlugAsync(string slug);
+    Task<bool> CreatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default);
+    Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, CancellationToken token = default);
+    Task<PastPapers?> GetPastPaperBySlugAsync(string slug, CancellationToken token = default);
     
-    Task<IEnumerable<PastPapers>> GetAllPastPapersAsync();
+    Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(CancellationToken token = default);
     
-    Task<PastPapers?> UpdatePastPaperAsync(PastPapers pastPapers);
-    Task<bool> DeletePastPaperAsync(string pastPaperId);
+    Task<PastPapers?> UpdatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default);
+    Task<bool> DeletePastPaperAsync(string pastPaperId, CancellationToken token = default);
 }

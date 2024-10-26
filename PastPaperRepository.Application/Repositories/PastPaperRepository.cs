@@ -14,9 +14,9 @@ public class PastPaperRepository : IPastPaperRepository
     }
 
     //TODOs: Handle the exception for item alerady exists
-    public async Task<bool> CreatePastPaperAsync(PastPapers pastPapers)
+    public async Task<bool> CreatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default)
     {
-        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
             var transaction = connection.BeginTransaction();
             
@@ -26,19 +26,19 @@ public class PastPaperRepository : IPastPaperRepository
             var result = await connection.ExecuteAsync(new CommandDefinition("""
                                                                              insert into PastPapers (PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath)
                                                                                  values (@PastPaperId, @Title, @Slug, @SubjectId, @CategoryId, @Year, @ExamType, @DifficultyLevel, @ExamBoard, @FilePath)
-                                                                             """, pastPapers));
+                                                                             """, pastPapers, cancellationToken: token));
 
             transaction.Commit();
             return result > 0;
         }
     }
 
-    public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId)
+    public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, CancellationToken token = default)
     {
-        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
             var pastPaper = await connection.QuerySingleOrDefaultAsync<PastPapers>(new CommandDefinition(@"
-                select * from PastPapers where PastPaperId = @pastPaperId", new {pastPaperId}));
+                select * from PastPapers where PastPaperId = @pastPaperId", new {pastPaperId}, cancellationToken: token));
             
             // if (pastPaper is null)
             // {
@@ -51,32 +51,32 @@ public class PastPaperRepository : IPastPaperRepository
        
     }
 
-    public async Task<PastPapers?> GetPastPaperBySlugAsync(string slug)
+    public async Task<PastPapers?> GetPastPaperBySlugAsync(string slug, CancellationToken token = default)
     {
-        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
             var pastPaper = await connection.QuerySingleOrDefaultAsync<PastPapers>(new CommandDefinition(@"
-                select * from PastPapers where Slug = @slug", new { slug }));
+                select * from PastPapers where Slug = @slug", new { slug }, cancellationToken: token));
             
             return pastPaper;
         }
     }
 
-    public async Task<IEnumerable<PastPapers>> GetAllPastPapersAsync()
+    public async Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(CancellationToken token = default)
     {
-        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
-            var pastPapers = await connection.QueryAsync<PastPapers>(@"
+            var pastPapers = await connection.QueryAsync<PastPapers>(new CommandDefinition(@"
             SELECT PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath 
-            FROM PastPapers");
+            FROM PastPapers", cancellationToken: token));
             
             return pastPapers;
         }
     }
 
- public async Task<bool> UpdatePastPaperAsync(PastPapers pastPapers)
+ public async Task<bool> UpdatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default)
 {
-    using (var connection = await _connectionFactory.CreateConnectionAsync())
+    using (var connection = await _connectionFactory.CreateConnectionAsync(token))
     {
         using (var transaction = connection.BeginTransaction())
         {
@@ -98,7 +98,7 @@ public class PastPaperRepository : IPastPaperRepository
                     DifficultyLevel = @DifficultyLevel,
                     ExamBoard = @ExamBoard,
                     FilePath = @FilePath
-                WHERE PastPaperId = @PastPaperId", pastPapers, transaction));
+                WHERE PastPaperId = @PastPaperId", pastPapers, transaction, cancellationToken: token));
 
                 transaction.Commit();
                 return result > 0;
@@ -112,9 +112,9 @@ public class PastPaperRepository : IPastPaperRepository
     }
 }
 
-   public async Task<bool> DeletePastPaperAsync(string pastPaperId)
+   public async Task<bool> DeletePastPaperAsync(string pastPaperId, CancellationToken token = default)
 {
-    using (var connection = await _connectionFactory.CreateConnectionAsync())
+    using (var connection = await _connectionFactory.CreateConnectionAsync(token))
     {
         using (var transaction = connection.BeginTransaction())
         {
@@ -126,7 +126,7 @@ public class PastPaperRepository : IPastPaperRepository
                 }
 
                 var result = await connection.ExecuteAsync(new CommandDefinition(@"
-                    DELETE FROM PastPapers WHERE PastPaperId = @pastPaperId", new { pastPaperId }, transaction));
+                    DELETE FROM PastPapers WHERE PastPaperId = @pastPaperId", new { pastPaperId }, transaction, cancellationToken: token));
 
                 transaction.Commit();
                 return result > 0;
@@ -140,12 +140,12 @@ public class PastPaperRepository : IPastPaperRepository
     }
 }
 
-    public async Task<bool> ExistsById(string pastPaperId)
+    public async Task<bool> ExistsById(string pastPaperId, CancellationToken token = default)
     {
-        using (var connection = await _connectionFactory.CreateConnectionAsync())
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
             var pastPaper = await connection.ExecuteScalarAsync<bool>(new CommandDefinition(@"
-                select count(1) from PastPapers where PastPaperId = @pastPaperId", new { pastPaperId }));
+                select count(1) from PastPapers where PastPaperId = @pastPaperId", new { pastPaperId }, cancellationToken: token));
             
             return pastPaper;
         }

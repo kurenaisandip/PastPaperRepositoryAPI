@@ -19,10 +19,10 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpPost(ApiEndPoints.PastPaper.Create)]
-    public async Task<IActionResult> CreatePastPapers([FromBody]CreatePastPaperRequest request)
+    public async Task<IActionResult> CreatePastPapers([FromBody]CreatePastPaperRequest request, CancellationToken token)
     {
         var pastPaper = request.MapToPastPapers();
-       await _pastPaperService.CreatePastPaperAsync(pastPaper);
+       await _pastPaperService.CreatePastPaperAsync(pastPaper, token);
         
        // Map the pastPaper object to a response DTO
        var response = pastPaper.MapToResponsePastPaper();
@@ -32,9 +32,9 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpGet(ApiEndPoints.PastPaper.Get)]
-    public async Task<IActionResult> GetPastPaper([FromRoute] string id)
+    public async Task<IActionResult> GetPastPaper([FromRoute] string id, CancellationToken token)
     {
-        var pastPaper = await _pastPaperService.GetPastPaperByIdAsync(id);
+        var pastPaper = await _pastPaperService.GetPastPaperByIdAsync(id, token);
 
         if (pastPaper is null)
         {
@@ -46,12 +46,12 @@ public class PastPaperController : ControllerBase
     } 
     
     [HttpGet(ApiEndPoints.PastPaper.GetBySlug)]
-    public async Task<IActionResult> GetPastPaperBySlug([FromRoute] string idOrSlug)
+    public async Task<IActionResult> GetPastPaperBySlug([FromRoute] string idOrSlug, CancellationToken token)
     {
         // var pastPaper = Guid.TryParse(idOrSlug, out var id) ? await _pastPaperService.GetPastPaperByIdAsync(id) : await _pastPaperService.GetPastPaperBySlugAsync(idOrSlug);
         // var pastPaper = Guid.TryParse(idOrSlug, out var id) ? await _pastPaperService.GetPastPaperByIdAsync(id) : await _pastPaperService.GetPastPaperBySlugAsync(idOrSlug);
         
-          var pastPaper =  await _pastPaperService.GetPastPaperBySlugAsync(idOrSlug);
+          var pastPaper =  await _pastPaperService.GetPastPaperBySlugAsync(idOrSlug, token);
         
         if (pastPaper is null)
         {
@@ -63,9 +63,9 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpGet(ApiEndPoints.PastPaper.GetAll)]
-    public async Task<IActionResult> GetAllPastPapers()
+    public async Task<IActionResult> GetAllPastPapers(CancellationToken token)
     {
-        var pastPapers = await _pastPaperService.GetAllPastPapersAsync();
+        var pastPapers = await _pastPaperService.GetAllPastPapersAsync(token);
 
         if (pastPapers is null)
         {
@@ -78,10 +78,10 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpPut(ApiEndPoints.PastPaper.Update)]
-    public async Task<IActionResult> UpdatePastPaper([FromRoute] string id, [FromBody] UpdatePastPaperRequest request)
+    public async Task<IActionResult> UpdatePastPaper([FromRoute] string id, [FromBody] UpdatePastPaperRequest request, CancellationToken token)
     {
         var pastPaper = request.MapToPastPapers(id);
-        var updatedPastPaper = await _pastPaperService.UpdatePastPaperAsync(pastPaper);
+        var updatedPastPaper = await _pastPaperService.UpdatePastPaperAsync(pastPaper, token);
 
         if (updatedPastPaper is null)
         {
@@ -93,9 +93,9 @@ public class PastPaperController : ControllerBase
     }
 
     [HttpDelete(ApiEndPoints.PastPaper.Delete)]
-    public async Task<IActionResult> DeletePastPaper([FromRoute] string id)
+    public async Task<IActionResult> DeletePastPaper([FromRoute] string id, CancellationToken token)
     {
-        var deletedPastPaper = await _pastPaperService.DeletePastPaperAsync(id);
+        var deletedPastPaper = await _pastPaperService.DeletePastPaperAsync(id, token);
         if (!deletedPastPaper)
         {
             return NotFound();
