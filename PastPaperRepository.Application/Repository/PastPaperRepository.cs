@@ -38,7 +38,7 @@ public class PastPaperRepository : IPastPaperRepository
         using (var connection = await _connectionFactory.CreateConnectionAsync())
         {
             var pastPaper = await connection.QuerySingleOrDefaultAsync<PastPapers>(new CommandDefinition(@"
-                select * from PastPapers where PastPaperId = @PastPaperId", new {pastPaperId}));
+                select * from PastPapers where PastPaperId = @pastPaperId", new {pastPaperId}));
             
             // if (pastPaper is null)
             // {
