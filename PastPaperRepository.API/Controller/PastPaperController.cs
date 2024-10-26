@@ -28,7 +28,7 @@ public class PastPaperController : ControllerBase
        var response = pastPaper.MapToResponsePastPaper();
        // return Ok(response);
        // return Created($"/api/createpastpaper/{response.PastPaperId}", response);
-       return CreatedAtAction(nameof(GetPastPaper), new { idOrSlug = response.PastPaperId }, response);
+       return CreatedAtAction(nameof(GetPastPaper), new { id = response.PastPaperId }, response);
     }
 
     [HttpGet(ApiEndPoints.PastPaper.Get)]
