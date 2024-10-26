@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Microsoft.Extensions.DependencyInjection;
 using PastPaperRepository.Application.Database;
-using PastPaperRepository.Application.Repository;
+using PastPaperRepository.Application.Repositories;
 
 namespace PastPaperRepository.Application.ApplicationService;
 
@@ -10,7 +10,7 @@ public static class ApplicationServiceCollectionExtensions
 
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddSingleton<IPastPaperRepository, Repository.PastPaperRepository>();
+        services.AddSingleton<IPastPaperRepository, Repositories.PastPaperRepository>();
         return services;
     }
 

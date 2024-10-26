@@ -2,7 +2,7 @@
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Models;
 
-namespace PastPaperRepository.Application.Repository;
+namespace PastPaperRepository.Application.Repositories;
 
 public class PastPaperRepository : IPastPaperRepository
 {
@@ -14,7 +14,7 @@ public class PastPaperRepository : IPastPaperRepository
     }
 
     //TODOs: Handle the exception for item alerady exists
-    public async Task<bool> CreatePaspaperAsync(PastPapers pastPapers)
+    public async Task<bool> CreatePastPaperAsync(PastPapers pastPapers)
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync())
         {
@@ -82,10 +82,10 @@ public class PastPaperRepository : IPastPaperRepository
         {
             try
             {
-                if (!await ExistsById(pastPapers.PastPaperId))
-                {
-                    return false;
-                }
+                // if (!await ExistsById(pastPapers.PastPaperId))
+                // {
+                //     return false;
+                // }
 
                 var result = await connection.ExecuteAsync(new CommandDefinition(@"
                 UPDATE PastPapers
