@@ -1,3 +1,6 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using PastPaperRepository.API.Mapping;
 using PastPaperRepository.Application.ApplicationService;
 using PastPaperRepository.Application.Database;
@@ -11,6 +14,23 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var config = builder.Configuration;
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ValidateAudience = true
+    };
+});
 
 // not a good way to DI in the application
 // builder.Services.AddSingleton<IPastPaperRepository, PastPaperRepository>();
@@ -36,4 +56,3 @@ var dbInitializer = app.Services.GetRequiredService<DbInitalizer>();
 await dbInitializer.InitializeAsync();
 
 app.Run();
-
