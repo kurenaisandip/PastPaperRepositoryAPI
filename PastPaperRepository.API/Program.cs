@@ -32,6 +32,8 @@ builder.Services.AddAuthentication(x =>
     };
 });
 
+builder.Services.AddAuthorization();
+
 // not a good way to DI in the application
 // builder.Services.AddSingleton<IPastPaperRepository, PastPaperRepository>();
 builder.Services.AddApplication();
