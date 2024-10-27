@@ -32,7 +32,8 @@ public class PastPaperController : ControllerBase
        // return Created($"/api/createpastpaper/{response.PastPaperId}", response);
        return CreatedAtAction(nameof(GetPastPaper), new { id = response.PastPaperId }, response);
     }
-
+    
+    [AllowAnonymous]
     [HttpGet(ApiEndPoints.PastPaper.Get)]
     public async Task<IActionResult> GetPastPaper([FromRoute] string id, CancellationToken token)
     {
@@ -64,6 +65,7 @@ public class PastPaperController : ControllerBase
         return Ok(response);
     }
 
+    [AllowAnonymous]
     [HttpGet(ApiEndPoints.PastPaper.GetAll)]
     public async Task<IActionResult> GetAllPastPapers(CancellationToken token)
     {
