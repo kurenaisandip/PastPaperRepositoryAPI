@@ -21,7 +21,7 @@ public class LoginController : ControllerBase
         _config = config;
     }
 
-    [HttpPost("api/login")]
+    [HttpPost(ApiEndPoints.Login.LoginUser)]
     public async Task<IActionResult> Login([FromBody] LogInUser logInUser)
     {
         var user = logInUser.MapToUsersLogin();
@@ -46,7 +46,7 @@ public class LoginController : ControllerBase
         return Ok(token);
     }
     
-    [HttpPost("api/register")]
+    [HttpPost(ApiEndPoints.Login.RegisterUser)]
     public async Task<IActionResult> Register([FromBody] LogInUser registerUser)
     {
         if (registerUser == null || string.IsNullOrWhiteSpace(registerUser.Name) || string.IsNullOrWhiteSpace(registerUser.Email)  || string.IsNullOrWhiteSpace(registerUser.Password))
