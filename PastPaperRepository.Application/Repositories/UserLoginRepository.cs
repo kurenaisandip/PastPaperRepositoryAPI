@@ -18,26 +18,28 @@ public class UserLoginRepository : IUserLoginRepository
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
-            var transaction = connection.BeginTransaction();
-            try
+            using (var transaction = connection.BeginTransaction())
             {
-                transaction.Commit();
-                var query = "SELECT COUNT(1) FROM Users WHERE Email = @Email AND Password = @Password";
-                var result = await connection.ExecuteScalarAsync<int>(new CommandDefinition(query,
-                    new { userLogin.Email, userLogin.Password }, transaction, cancellationToken: token));
-
-                if (result == 0)
+                try
                 {
-                    return false;
-                }
+                    var query = "SELECT COUNT(1) FROM Users WHERE Email = @Email AND Password = @Password";
+                    var result = await connection.ExecuteScalarAsync<int>(new CommandDefinition(query,
+                        new { userLogin.Email, userLogin.Password }, transaction, cancellationToken: token));
 
-                return result > 0;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                transaction.Rollback();
-                throw;
+                    if (result == 0)
+                    {
+                        return false;
+                    }
+
+                    transaction.Commit();
+                    return result > 0;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
     }
