@@ -1,4 +1,6 @@
-﻿namespace PastPaperRepository.API;
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace PastPaperRepository.API;
 
 public static class ApiEndPoints
 {
@@ -15,5 +17,11 @@ public static class ApiEndPoints
      public const string Update = $"{Base}/{{id:guid}}";
      public const string Delete = $"{Base}/{{id:guid}}";
 
+    }
+    
+    public static class Login
+    {
+        public const string LoginUser = $"{ApiBaseUrl}/login";
+        public const string RegisterUser = $"{ApiBaseUrl}/register";
     }
 }
