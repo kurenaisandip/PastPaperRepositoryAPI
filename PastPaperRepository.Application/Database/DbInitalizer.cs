@@ -29,10 +29,18 @@ public class DbInitalizer
                 FilePath TEXT NOT NULL
 );";
             await connection.ExecuteAsync(createPastPaperTable);
-            
+
             await connection.ExecuteAsync("""
                                           create unique index if not exists IX_PastPapers_Slug on PastPapers(Slug);
                                           """);
+
+            await connection.ExecuteAsync(@"
+            CREATE TABLE IF NOT EXISTS Users (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL
+);");
         }
     }
 }
