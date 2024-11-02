@@ -80,4 +80,13 @@ public static class ContractMapping
         };
     }
     
+    public static UsersLogin MapToUsersLogin(this LogInUser request)
+    {
+        return new UsersLogin()
+        {
+            Email = request.Email,
+            Password = request.Password
+        };
+    }
+    
 }
