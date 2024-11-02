@@ -15,6 +15,9 @@ builder.Services.AddSwaggerGen();
 
 var config = builder.Configuration;
 
+//JWT configuration
+var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
+
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -28,7 +31,11 @@ builder.Services.AddAuthentication(x =>
             Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
         ValidateIssuerSigningKey = true,
         ValidateLifetime = true,
-        ValidateAudience = true
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidAudience = jwtIssuer,
+        ValidIssuer = jwtIssuer,
+        
     };
 });
 
