@@ -1,23 +1,24 @@
-﻿using PastPaperRepository.Application.Models;
+﻿using PastPaperRepository.Application.Database;
+using PastPaperRepository.Application.Models;
 
 namespace PastPaperRepository.Application.Repositories;
 
 public class UserLoginRepository: IUserLoginRepository
 {
-    private readonly List<UsersLogin> _users = new();
-    
-    public Task<bool> Login(UsersLogin userLogin)
+    private readonly IDbConnectionFactory _connectionFactory;
+
+    public UserLoginRepository(IDbConnectionFactory connectionFactory)
     {
-        if (_users.Any(x => x.Email == userLogin.Email && x.Password == userLogin.Password))
-        {
-            return Task.FromResult(true);
-        }
-        return Task.FromResult(false);
+        _connectionFactory = connectionFactory;
     }
 
-    public Task<bool> Register(UsersLogin userLogin)
+    public Task<bool> Login(UsersLogin userLogin, CancellationToken token = default)
     {
-       _users.Add(userLogin);
-         return Task.FromResult(true);
+       
+    }
+
+    public Task<bool> Register(UsersLogin userLogin, CancellationToken token = default)
+    {
+       
     }
 }
