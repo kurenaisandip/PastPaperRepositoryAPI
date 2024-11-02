@@ -9,7 +9,7 @@ using PastPaperRepository.Contracts.Responses;
 
 namespace PastPaperRepository.API.Controller;
 
-// [Authorize]
+[Authorize]
 [ApiController]
 public class PastPaperController : ControllerBase
 {
@@ -67,7 +67,7 @@ public class PastPaperController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet(ApiEndPoints.PastPaper.GetAll)]
-    public async Task<IActionResult> GetAllPastPapers(CancellationToken token)
+    public async Task<IActionResult> GetAllPastPapers([FromQuery] GetAllPastPapersRequest request, CancellationToken token)
     {
         var pastPapers = await _pastPaperService.GetAllPastPapersAsync(token);
 
