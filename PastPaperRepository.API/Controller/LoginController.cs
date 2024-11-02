@@ -47,14 +47,14 @@ public class LoginController : ControllerBase
     }
     
     [HttpPost(ApiEndPoints.Login.RegisterUser)]
-    public async Task<IActionResult> Register([FromBody] LogInUser registerUser)
+    public async Task<IActionResult> Register([FromBody] RegisterUser registerUser)
     {
         if (registerUser == null || string.IsNullOrWhiteSpace(registerUser.Name) || string.IsNullOrWhiteSpace(registerUser.Email)  || string.IsNullOrWhiteSpace(registerUser.Password))
         {
             return BadRequest("Invalid user data provided.");
         }
         
-        var user = registerUser.MapToUsersLogin();
+        var user = registerUser.MapToUsersRegister();
         
         var result = await _userLoginRepository.Register(user);
 

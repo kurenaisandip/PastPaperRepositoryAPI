@@ -87,6 +87,15 @@ public static class ContractMapping
             Email = request.Email,
             Password = request.Password
         };
+    } 
+    public static UsersLogin MapToUsersRegister(this RegisterUser request)
+    {
+        return new UsersLogin()
+        {
+            Name = request.Name,
+            Email = request.Email,
+            Password = request.Password
+        };
     }
     
 }
