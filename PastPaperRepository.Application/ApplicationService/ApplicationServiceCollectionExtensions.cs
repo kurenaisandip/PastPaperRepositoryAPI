@@ -15,6 +15,8 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<IPastPaperRepository, Repositories.PastPaperRepository>();
         services.AddSingleton<IPastPaperService, Services.PastPaperService>();
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
+
+        services.AddSingleton<IUserLoginRepository, UserLoginRepository>();
         return services;
     }
 
