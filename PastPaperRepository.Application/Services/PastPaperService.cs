@@ -32,9 +32,10 @@ public class PastPaperService: IPastPaperService
         return _pastPaperRepository.GetPastPaperBySlugAsync(slug, token);
     }
 
-    public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(string? userId = default, CancellationToken token = default)
+    public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(GetAllPastPapersOptions options,
+        CancellationToken token = default)
     {
-        return _pastPaperRepository.GetAllPastPapersAsync(token);
+        return _pastPaperRepository.GetAllPastPapersAsync(options, token);
     }
 
     public async Task<PastPapers?> UpdatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default)

@@ -62,7 +62,7 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public async Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(CancellationToken token = default)
+    public async Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(GetAllPastPapersOptions options,CancellationToken token = default)
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {

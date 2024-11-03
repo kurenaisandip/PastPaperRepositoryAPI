@@ -74,7 +74,9 @@ public class PastPaperController : ControllerBase
     public async Task<IActionResult> GetAllPastPapers([FromQuery] GetAllPastPapersRequest request, CancellationToken token)
     {
         var userId = HttpContext.GetUserId();
-        var pastPapers = await _pastPaperService.GetAllPastPapersAsync(userId, token);
+        
+        var options = request.MapToGetAllPastPapersOptions().WithUserId(userId);
+        var pastPapers = await _pastPaperService.GetAllPastPapersAsync(options, token);
 
         if (pastPapers is null)
         {

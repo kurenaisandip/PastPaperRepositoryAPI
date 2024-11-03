@@ -98,4 +98,19 @@ public static class ContractMapping
         };
     }
     
+    public static GetAllPastPapersOptions MapToGetAllPastPapersOptions(this GetAllPastPapersRequest request)
+    {
+        return new GetAllPastPapersOptions()
+        {
+            Title = request.Title,
+            Year = request.Year
+        };
+    }
+    
+    public static GetAllPastPapersOptions WithUserId(this GetAllPastPapersOptions options, string? userId)
+    {
+        options.UserID = userId;
+        return options;
+    }
+    
 }
