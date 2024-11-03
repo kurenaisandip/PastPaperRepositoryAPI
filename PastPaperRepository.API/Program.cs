@@ -44,6 +44,13 @@ builder.Services.AddAuthorization(x =>
 {
     x.AddPolicy(AuthConstants.AdminUserPolicyName,
         policy => policy.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
+    
+    x.AddPolicy(AuthConstants.TrustedMemberPolicyName,
+        policy => policy.RequireAssertion(context =>
+      context.User.HasClaim(m => m is {Type: AuthConstants.AdminUserClaimName, Value: "true" }) ||
+      context.User.HasClaim(m => m is {Type: AuthConstants.TrustedMemberClaimName, Value: "true" })
+      
+      ));
 });
 
 // not a good way to DI in the application
