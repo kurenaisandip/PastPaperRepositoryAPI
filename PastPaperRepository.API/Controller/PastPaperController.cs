@@ -39,7 +39,9 @@ public class PastPaperController : ControllerBase
     [HttpGet(ApiEndPoints.PastPaper.Get)]
     public async Task<IActionResult> GetPastPaper([FromRoute] string id, CancellationToken token)
     {
-        var pastPaper = await _pastPaperService.GetPastPaperByIdAsync(id, token);
+        var userId = HttpContext.GetUserId();
+        
+        var pastPaper = await _pastPaperService.GetPastPaperByIdAsync(id, userId, token);
 
         if (pastPaper is null)
         {
@@ -71,8 +73,8 @@ public class PastPaperController : ControllerBase
     [HttpGet(ApiEndPoints.PastPaper.GetAll)]
     public async Task<IActionResult> GetAllPastPapers([FromQuery] GetAllPastPapersRequest request, CancellationToken token)
     {
-        // var userId = HttpContext.getuserId();
-        var pastPapers = await _pastPaperService.GetAllPastPapersAsync(token);
+        var userId = HttpContext.GetUserId();
+        var pastPapers = await _pastPaperService.GetAllPastPapersAsync(userId, token);
 
         if (pastPapers is null)
         {
