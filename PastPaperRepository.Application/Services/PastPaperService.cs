@@ -9,11 +9,13 @@ public class PastPaperService: IPastPaperService
 {
     private readonly IPastPaperRepository _pastPaperRepository;
     private readonly IValidator<PastPapers> _pastPaperValidators;
+    private readonly GetAllPastPapersOptionValidator _getAllPastPapersOptionValidator;
 
-    public PastPaperService(IPastPaperRepository pastPaperRepository, IValidator<PastPapers> pastPaperValidators)
+    public PastPaperService(IPastPaperRepository pastPaperRepository, IValidator<PastPapers> pastPaperValidators, GetAllPastPapersOptionValidator getAllPastPapersOptionValidator)
     {
         _pastPaperRepository = pastPaperRepository;
         _pastPaperValidators = pastPaperValidators;
+        _getAllPastPapersOptionValidator = getAllPastPapersOptionValidator;
     }
 
     public async Task<bool> CreatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default)
@@ -22,9 +24,9 @@ public class PastPaperService: IPastPaperService
         return await _pastPaperRepository.CreatePastPaperAsync(pastPapers, token);
     }
 
-    public Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, string? userId = default, CancellationToken token = default)
+    public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, string? userId = default, CancellationToken token = default)
     {
-        return _pastPaperRepository.GetPastPaperByIdAsync(pastPaperId, token);
+        return await _pastPaperRepository.GetPastPaperByIdAsync(pastPaperId, token);
     }
 
     public Task<PastPapers?> GetPastPaperBySlugAsync(string slug, CancellationToken token = default)
@@ -32,10 +34,12 @@ public class PastPaperService: IPastPaperService
         return _pastPaperRepository.GetPastPaperBySlugAsync(slug, token);
     }
 
-    public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(GetAllPastPapersOptions options,
+    public async Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(GetAllPastPapersOptions options,
         CancellationToken token = default)
     {
-        return _pastPaperRepository.GetAllPastPapersAsync(options, token);
+        await _getAllPastPapersOptionValidator.ValidateAndThrowAsync(options, cancellationToken: token);
+        
+        return await _pastPaperRepository.GetAllPastPapersAsync(options, token);
     }
 
     public async Task<PastPapers?> UpdatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default)
@@ -51,8 +55,8 @@ public class PastPaperService: IPastPaperService
       return pastPapers;
     }
 
-    public Task<bool> DeletePastPaperAsync(string pastPaperId, CancellationToken token = default)
+    public async Task<bool> DeletePastPaperAsync(string pastPaperId, CancellationToken token = default)
     {
-        return _pastPaperRepository.DeletePastPaperAsync(pastPaperId, token);
+        return await _pastPaperRepository.DeletePastPaperAsync(pastPaperId, token);
     }
 }
