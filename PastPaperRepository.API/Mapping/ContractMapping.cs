@@ -103,7 +103,9 @@ public static class ContractMapping
         return new GetAllPastPapersOptions()
         {
             Title = request.Title,
-            Year = request.Year
+            Year = request.Year,
+            SortField = request.SortBy?.Trim('+', '-'),
+            SortOrder = request.SortBy is null ? SortOrder.UnSorted : request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending
         };
     }
     
