@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PastPaperRepository.API.Auth;
 using PastPaperRepository.API.Mapping;
 using PastPaperRepository.Application.Models;
 using PastPaperRepository.Application.Repositories;
@@ -9,7 +10,7 @@ using PastPaperRepository.Contracts.Responses;
 
 namespace PastPaperRepository.API.Controller;
 
-[Authorize]
+// [Authorize]
 [ApiController]
 public class PastPaperController : ControllerBase
 {
@@ -20,6 +21,7 @@ public class PastPaperController : ControllerBase
         _pastPaperService = pastPaperService;
     }
 
+    [Authorize(AuthConstants.AdminUserPolicyName)]
     [HttpPost(ApiEndPoints.PastPaper.Create)]
     public async Task<IActionResult> CreatePastPapers([FromBody]CreatePastPaperRequest request, CancellationToken token)
     {
@@ -33,7 +35,7 @@ public class PastPaperController : ControllerBase
        return CreatedAtAction(nameof(GetPastPaper), new { id = response.PastPaperId }, response);
     }
     
-    [AllowAnonymous]
+    // [AllowAnonymous]
     [HttpGet(ApiEndPoints.PastPaper.Get)]
     public async Task<IActionResult> GetPastPaper([FromRoute] string id, CancellationToken token)
     {
@@ -65,10 +67,11 @@ public class PastPaperController : ControllerBase
         return Ok(response);
     }
 
-    [AllowAnonymous]
+  
     [HttpGet(ApiEndPoints.PastPaper.GetAll)]
     public async Task<IActionResult> GetAllPastPapers([FromQuery] GetAllPastPapersRequest request, CancellationToken token)
     {
+        // var userId = HttpContext.getuserId();
         var pastPapers = await _pastPaperService.GetAllPastPapersAsync(token);
 
         if (pastPapers is null)
@@ -81,6 +84,7 @@ public class PastPaperController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize(AuthConstants.AdminUserPolicyName)]
     [HttpPut(ApiEndPoints.PastPaper.Update)]
     public async Task<IActionResult> UpdatePastPaper([FromRoute] string id, [FromBody] UpdatePastPaperRequest request, CancellationToken token)
     {
@@ -96,6 +100,7 @@ public class PastPaperController : ControllerBase
         return Ok(response);
     }
 
+    [Authorize(AuthConstants.AdminUserPolicyName)]
     [HttpDelete(ApiEndPoints.PastPaper.Delete)]
     public async Task<IActionResult> DeletePastPaper([FromRoute] string id, CancellationToken token)
     {

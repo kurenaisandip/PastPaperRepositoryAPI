@@ -1,6 +1,7 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PastPaperRepository.API.Auth;
 using PastPaperRepository.API.Mapping;
 using PastPaperRepository.Application.ApplicationService;
 using PastPaperRepository.Application.Database;
@@ -39,7 +40,11 @@ builder.Services.AddAuthentication(x =>
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(x =>
+{
+    x.AddPolicy(AuthConstants.AdminUserPolicyName,
+        policy => policy.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
+});
 
 // not a good way to DI in the application
 // builder.Services.AddSingleton<IPastPaperRepository, PastPaperRepository>();
