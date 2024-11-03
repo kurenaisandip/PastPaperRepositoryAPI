@@ -67,11 +67,20 @@ public class PastPaperRepository : IPastPaperRepository
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
-            var pastPapers = await connection.QueryAsync<PastPapers>(new CommandDefinition(@"
-            SELECT PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath 
-            FROM PastPapers WHERE (@Year IS NULL OR Year = @Year)
-            AND (@Title IS NULL OR Title LIKE '%' || @Title || '%')",
-                new { userID = options.UserID, title = options.Title, year = options.Year }, cancellationToken: token));
+            var query = @"
+            SELECT PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath
+            FROM PastPapers
+            WHERE (@Year IS NULL OR Year = @Year)
+            AND (@Title IS NULL OR Title LIKE '%' || @Title || '%')";
+
+            if (!string.IsNullOrEmpty(options.SortField))
+            {
+                var sortOrder = options.SortOrder == SortOrder.Descending ? "DESC" : "ASC";
+                query += $" ORDER BY {options.SortField} {sortOrder}";
+            }
+
+            var pastPapers = await connection.QueryAsync<PastPapers>(new CommandDefinition(query,
+                new { options.Year, options.Title }, cancellationToken: token));
 
             return pastPapers;
         }
