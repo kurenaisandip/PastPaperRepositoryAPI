@@ -13,5 +13,9 @@ public class GetAllPastPapersOptionValidator: AbstractValidator<GetAllPastPapers
         RuleFor(x => x.SortField)
             .Must(field => AcceptableSortFields.Contains(field))
             .WithMessage("Invalid sort field. Acceptable fields are: " + string.Join(", ", AcceptableSortFields));
+
+        RuleFor(x => x.Page).GreaterThanOrEqualTo(1);
+
+        RuleFor(x => x.PageSize).InclusiveBetween(1, 25).WithMessage("you can get between 1 and 25 movies per page");
     }
 }
