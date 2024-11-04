@@ -59,4 +59,9 @@ public class PastPaperService: IPastPaperService
     {
         return await _pastPaperRepository.DeletePastPaperAsync(pastPaperId, token);
     }
+
+    public Task<int> GetCountAsync(string? title, int? year, CancellationToken token = default)
+    {
+        return _pastPaperRepository.GetCountAsync(title, year, token);
+    }
 }

@@ -68,10 +68,10 @@ public class PastPaperRepository : IPastPaperRepository
         using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
             var query = @"
-            SELECT PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath
-            FROM PastPapers
-            WHERE (@Year IS NULL OR Year = @Year)
-            AND (@Title IS NULL OR Title LIKE '%' || @Title || '%')";
+        SELECT PastPaperId, Title, Slug, SubjectId, CategoryId, Year, ExamType, DifficultyLevel, ExamBoard, FilePath
+        FROM PastPapers
+        WHERE (@Year IS NULL OR Year = @Year)
+        AND (@Title IS NULL OR Title LIKE '%' || @Title || '%')";
 
             if (!string.IsNullOrEmpty(options.SortField))
             {
@@ -79,8 +79,14 @@ public class PastPaperRepository : IPastPaperRepository
                 query += $" ORDER BY {options.SortField} {sortOrder}";
             }
 
+            query += " LIMIT @pageSize OFFSET @pageOffSet";
+
             var pastPapers = await connection.QueryAsync<PastPapers>(new CommandDefinition(query,
-                new { options.Year, options.Title }, cancellationToken: token));
+                new
+                {
+                    options.Year, options.Title, pageSize = options.PageSize,
+                    pageOffSet = (options.Page - 1) * options.PageSize
+                }, cancellationToken: token));
 
             return pastPapers;
         }
@@ -162,6 +168,16 @@ public class PastPaperRepository : IPastPaperRepository
                 cancellationToken: token));
 
             return pastPaper;
+        }
+    }
+
+    public async Task<int> GetCountAsync(string? title, int? year, CancellationToken token = default)
+    {
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+        {
+            return await connection.QuerySingleAsync<int>(new CommandDefinition(@"
+            select count(1) from PastPapers where (@Year IS NULL OR Year = @Year) AND (@Title IS NULL OR Title LIKE '%' || @Title || '%')",
+                new { Year = year, Title = title }, cancellationToken: token));
         }
     }
 }

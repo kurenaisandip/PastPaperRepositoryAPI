@@ -13,4 +13,6 @@ public interface IPastPaperRepository
     Task<bool> UpdatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default);
     Task<bool> DeletePastPaperAsync(string pastPaperId, CancellationToken token = default);
     Task<bool> ExistsById(string pastPaperId, CancellationToken token = default);
+    
+    Task<int> GetCountAsync(string? title, int? year, CancellationToken token = default);
 }

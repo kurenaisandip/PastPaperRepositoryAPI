@@ -40,13 +40,17 @@ public static class ContractMapping
 
     }
 
-    public static PastPapersResponse MapToPastPapersResponse(this IEnumerable<PastPapers> pastPapers)
+    public static PastPapersResponse MapToPastPapersResponse(this IEnumerable<PastPapers> pastPapers, int page, int pageSize,int totalCount)
     {
         return new PastPapersResponse()
         {
-            PastPapers = pastPapers.Select(p => p.MapToResponsePastPaper())
+            PastPapers = pastPapers.Select(p => p.MapToResponsePastPaper()),
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
         };
     }
+
     
     public static PastPapers MapToPastPapers(this UpdatePastPaperRequest request, string id)
     {
@@ -105,7 +109,10 @@ public static class ContractMapping
             Title = request.Title,
             Year = request.Year,
             SortField = request.SortBy?.Trim('+', '-'),
-            SortOrder = request.SortBy is null ? SortOrder.UnSorted : request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending
+            SortOrder = request.SortBy is null ? SortOrder.UnSorted : request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending,
+            Page = request.Page,
+            PageSize = request.PageSize,
+            
         };
     }
     

@@ -77,13 +77,13 @@ public class PastPaperController : ControllerBase
         
         var options = request.MapToGetAllPastPapersOptions().WithUserId(userId);
         var pastPapers = await _pastPaperService.GetAllPastPapersAsync(options, token);
-
+        var pastPaperCount = await _pastPaperService.GetCountAsync(options.Title, options.Year, token);
         if (pastPapers is null)
         {
             return NotFound();
         }
 
-        var response = pastPapers.MapToPastPapersResponse();
+        var response = pastPapers.MapToPastPapersResponse(request.Page, request.PageSize, pastPaperCount);
         
         return Ok(response);
     }

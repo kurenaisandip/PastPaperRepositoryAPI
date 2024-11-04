@@ -1,6 +1,5 @@
 ﻿namespace PastPaperRepository.Contracts.Responses;
 
-public class PastPapersResponse
+public class PastPapersResponse : PagedResponse<PastPaperResponse>
 {
-    public IEnumerable<PastPaperResponse> PastPapers { get; init; } = Enumerable.Empty<PastPaperResponse>();
 }
