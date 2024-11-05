@@ -1,4 +1,5 @@
 using System.Text;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PastPaperRepository.API.Auth;
@@ -10,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddApiVersioning(x =>
+{
+    x.DefaultApiVersion = new ApiVersion(1.0);
+    x.AssumeDefaultVersionWhenUnspecified = true;
+    x.ReportApiVersions = true;
+}).AddMvc();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,13 +51,12 @@ builder.Services.AddAuthorization(x =>
 {
     x.AddPolicy(AuthConstants.AdminUserPolicyName,
         policy => policy.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
-    
+
     x.AddPolicy(AuthConstants.TrustedMemberPolicyName,
         policy => policy.RequireAssertion(context =>
-      context.User.HasClaim(m => m is {Type: AuthConstants.AdminUserClaimName, Value: "true" }) ||
-      context.User.HasClaim(m => m is {Type: AuthConstants.TrustedMemberClaimName, Value: "true" })
-      
-      ));
+            context.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" }) ||
+            context.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" })
+        ));
 });
 
 // not a good way to DI in the application

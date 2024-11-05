@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PastPaperRepository.API.Auth;
 using PastPaperRepository.API.Mapping;
@@ -12,6 +13,7 @@ namespace PastPaperRepository.API.Controller;
 
 // [Authorize]
 [ApiController]
+[ApiVersion(1.0)]
 public class PastPaperController : ControllerBase
 {
     private readonly IPastPaperService _pastPaperService;
