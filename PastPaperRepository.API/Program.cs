@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PastPaperRepository.API.Auth;
+using PastPaperRepository.API.Health;
 using PastPaperRepository.API.Mapping;
 using PastPaperRepository.API.Swagger;
 using PastPaperRepository.Application.ApplicationService;
@@ -25,6 +26,8 @@ builder.Services.AddApiVersioning(x =>
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks()
+    .AddCheck<DatabaseHealthCheck>(DatabaseHealthCheck.Name);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x => x.OperationFilter<SwaggerDefaultValue>());
 
@@ -86,6 +89,8 @@ if (app.Environment.IsDevelopment())
         }
     });
 }
+
+app.MapHealthChecks("_health");
 
 app.UseHttpsRedirection();
 
