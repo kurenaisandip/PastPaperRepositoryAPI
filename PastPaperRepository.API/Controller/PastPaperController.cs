@@ -14,8 +14,6 @@ namespace PastPaperRepository.API.Controller;
 // [Authorize]
 [ApiController]
 [ApiVersion(1.0)]
-[ApiVersion(2.0, Deprecated = true)]
-[ApiVersion(3.0)]
 public class PastPaperController : ControllerBase
 {
     private readonly IPastPaperService _pastPaperService;
@@ -40,7 +38,6 @@ public class PastPaperController : ControllerBase
     }
     
     // [AllowAnonymous]
-    [MapToApiVersion(2.0)]
     [HttpGet(ApiEndPoints.PastPaper.Get)]
     public async Task<IActionResult> GetPastPaper([FromRoute] string id, CancellationToken token)
     {
