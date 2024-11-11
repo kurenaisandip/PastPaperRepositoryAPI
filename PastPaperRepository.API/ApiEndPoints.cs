@@ -24,4 +24,9 @@ public static class ApiEndPoints
         public const string LoginUser = $"{ApiBaseUrl}/login";
         public const string RegisterUser = $"{ApiBaseUrl}/register";
     }
+    
+    public static class EducationalEntities
+    {
+        public const string CreateRole = $"{ApiBaseUrl}/role";
+    }
 }
