@@ -90,12 +90,17 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+builder.Services.AddResponseCaching();
+
 app.MapHealthChecks("_health");
 
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCors();
+app.UseResponseCaching();
 
 app.UseMiddleware<ValidationMappingMiddleware>();
 

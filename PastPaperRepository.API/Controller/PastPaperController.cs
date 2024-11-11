@@ -38,6 +38,7 @@ public class PastPaperController : ControllerBase
     }
     
     // [AllowAnonymous]
+    [ResponseCache(Duration = 30, VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any)]
     [HttpGet(ApiEndPoints.PastPaper.Get)]
     public async Task<IActionResult> GetPastPaper([FromRoute] string id, CancellationToken token)
     {
@@ -54,6 +55,7 @@ public class PastPaperController : ControllerBase
         return Ok(response);
     } 
     
+    [ResponseCache(Duration = 30, VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any)]
     [HttpGet(ApiEndPoints.PastPaper.GetBySlug)]
     public async Task<IActionResult> GetPastPaperBySlug([FromRoute] string idOrSlug, CancellationToken token)
     {
@@ -71,7 +73,7 @@ public class PastPaperController : ControllerBase
         return Ok(response);
     }
 
-  
+    [ResponseCache(Duration = 30, VaryByQueryKeys = new []{"Title", "year", "sortBy", "page", "pageSize"} ,VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any)]
     [HttpGet(ApiEndPoints.PastPaper.GetAll)]
     public async Task<IActionResult> GetAllPastPapers([FromQuery] GetAllPastPapersRequest request, CancellationToken token)
     {
