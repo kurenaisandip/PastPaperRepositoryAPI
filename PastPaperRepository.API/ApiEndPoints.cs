@@ -28,5 +28,8 @@ public static class ApiEndPoints
     public static class EducationalEntities
     {
         public const string CreateRole = $"{ApiBaseUrl}/role";
+        public const string GetAllRole = $"{ApiBaseUrl}/role/all";
+        public const string UpdateRole = $"{ApiBaseUrl}/role/update{{id:int}}";
+        public const string DeleteRole = $"{ApiBaseUrl}/role/delete{{id:int}}";
     }
 }
