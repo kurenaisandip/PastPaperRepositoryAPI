@@ -3,6 +3,7 @@ using PastPaperRepository.Application.Models.EducationalEntities;
 using PastPaperRepository.Contracts.Requests;
 using PastPaperRepository.Contracts.Requests.EducationalEntities;
 using PastPaperRepository.Contracts.Responses;
+using PastPaperRepository.Contracts.Responses.EducationalEntitiiesReponses;
 
 namespace PastPaperRepository.API.Mapping;
 
@@ -127,6 +128,13 @@ public static class ContractMapping
     public static Roles MapToRoles(this CreateRoleRequest request)
     {
         return new Roles
+        {
+            Name = request.Name
+        };
+    }  
+    public static RoleResponse MapToResponseRole(this Roles request)
+    {
+        return new RoleResponse
         {
             Name = request.Name
         };
