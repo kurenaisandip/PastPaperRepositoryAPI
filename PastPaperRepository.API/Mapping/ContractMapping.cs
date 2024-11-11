@@ -1,5 +1,7 @@
 ﻿using PastPaperRepository.Application.Models;
+using PastPaperRepository.Application.Models.EducationalEntities;
 using PastPaperRepository.Contracts.Requests;
+using PastPaperRepository.Contracts.Requests.EducationalEntities;
 using PastPaperRepository.Contracts.Responses;
 
 namespace PastPaperRepository.API.Mapping;
@@ -120,6 +122,14 @@ public static class ContractMapping
     {
         options.UserID = userId;
         return options;
+    }
+
+    public static Roles MapToRoles(this CreateRoleRequest request)
+    {
+        return new Roles
+        {
+            Name = request.Name
+        };
     }
     
 }
