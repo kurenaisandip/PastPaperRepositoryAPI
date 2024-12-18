@@ -18,6 +18,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
 
         services.AddSingleton<IUserLoginRepository, UserLoginRepository>();
+        services.AddSingleton<ISpacedRepetitionService, SpacedRepetitionService>();
         return services;
     }
 
