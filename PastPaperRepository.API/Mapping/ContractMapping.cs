@@ -1,7 +1,9 @@
 ﻿using PastPaperRepository.Application.Models;
 using PastPaperRepository.Application.Models.EducationalEntities;
+using PastPaperRepository.Application.Models.SpacedRepetition;
 using PastPaperRepository.Contracts.Requests;
 using PastPaperRepository.Contracts.Requests.EducationalEntities;
+using PastPaperRepository.Contracts.Requests.SpacedRepetition;
 using PastPaperRepository.Contracts.Responses;
 using PastPaperRepository.Contracts.Responses.EducationalEntitiiesReponses;
 
@@ -137,6 +139,18 @@ public static class ContractMapping
         return new RoleResponse
         {
             Name = request.Name
+        };
+    }
+    
+    public static LearningDeck MapToLearningDeck(this CreateLearningDeckRequest request)
+    {
+        return new LearningDeck
+        {
+            UserId = request.UserId,
+            PastPaperId = request.PastPaperId,
+            AddedDate = request.AddedDate,
+            NextReviewDate = request.NextReviewDate,
+            Status = request.Status,
         };
     }
     
