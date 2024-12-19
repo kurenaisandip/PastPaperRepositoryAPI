@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PastPaperRepository.Contracts")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ca49d9f2e744cd912dc9c05fdd9b6f554a1f0146")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e6b7ec94312843fbdbc5a8804775841487659f3f")]
 [assembly: System.Reflection.AssemblyProductAttribute("PastPaperRepository.Contracts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PastPaperRepository.Contracts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

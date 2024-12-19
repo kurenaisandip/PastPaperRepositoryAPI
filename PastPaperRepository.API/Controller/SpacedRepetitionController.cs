@@ -37,9 +37,9 @@ public class SpacedRepetitionController : ControllerBase
     
     [AllowAnonymous]
     [HttpGet("api/spaced-repetition/ShowQuestionAnswer")]
-    public async Task<IActionResult> ShowQuestionAnswerAsync([FromQuery] long pastPaperId,  CancellationToken token = default)
+    public async Task<IActionResult> ShowQuestionAnswerAsync([FromQuery] string pastPaperId, [FromQuery] long UserId,  CancellationToken token = default)
     {
-       
-        return Ok();
+       var result = await _spacedRepetitionService.ShowQuestionAnswerAsync(pastPaperId, UserId, token);
+        return Ok(result);
     }
 }
