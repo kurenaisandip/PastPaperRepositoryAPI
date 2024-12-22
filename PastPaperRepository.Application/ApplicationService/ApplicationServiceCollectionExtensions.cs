@@ -19,6 +19,8 @@ public static class ApplicationServiceCollectionExtensions
 
         services.AddSingleton<IUserLoginRepository, UserLoginRepository>();
         services.AddSingleton<ISpacedRepetitionService, SpacedRepetitionService>();
+
+        services.AddSingleton<ISpacedRepetitionRepository, SpacedRepetitionRepository>();
         return services;
     }
 
