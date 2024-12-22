@@ -1,5 +1,6 @@
 ﻿using PastPaperRepository.Application.Models;
 using PastPaperRepository.Application.Models.SpacedRepetition;
+using PastPaperRepository.Application.Repositories;
 
 namespace PastPaperRepository.Application.Services;
 
@@ -14,6 +15,7 @@ public class QuestionAnswers
 
 public class SpacedRepetitionService : ISpacedRepetitionService
 {
+    private readonly ISpacedRepetitionRepository _spacedRepetitionRepository;
     private List<LearningDeck> _learningDeckRepository = new List<LearningDeck>
     {
         new LearningDeck
@@ -174,8 +176,15 @@ public class SpacedRepetitionService : ISpacedRepetitionService
             { Id = 10, PastPaperId = "PP005", QuestionNumber = 2, Question = "When did WW2 start?", Answer = "1939." },
     };
 
+    public SpacedRepetitionService(ISpacedRepetitionRepository spacedRepetitionRepository)
+    {
+        _spacedRepetitionRepository = spacedRepetitionRepository;
+    }
+
     public Task<bool> AddToLearningDeckAsync(LearningDeck request, CancellationToken token = default)
     {
+        
+        return _spacedRepetitionRepository.AddToLearningDeckAsync(request, token);
         try
         {
             // Add the item to the repository
@@ -193,6 +202,7 @@ public class SpacedRepetitionService : ISpacedRepetitionService
 
     public Task<List<DeckViewModel>> GetLearningDeckAsync(long userId, CancellationToken token)
     {
+        return _spacedRepetitionRepository.GetLearningDeckAsync(userId, token);
         var learningDecks = _learningDeckRepository
             .Where(deck => deck.UserId == userId)
             .ToList();
@@ -214,6 +224,8 @@ public class SpacedRepetitionService : ISpacedRepetitionService
     public Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(string pastPaperId, long userId,
         CancellationToken token = default)
     {
+        
+        return _spacedRepetitionRepository.ShowQuestionAnswerAsync(pastPaperId, userId, token);
         // Check if the past paper id exists in the pastPapers list
         var pastPaper = pastPapers.FirstOrDefault(p => p.PastPaperId == pastPaperId);
         if (pastPaper == null)
