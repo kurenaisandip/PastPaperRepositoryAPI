@@ -2,7 +2,6 @@
 using Dapper;
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Models.SpacedRepetition;
-using QuestionAnswers = PastPaperRepository.Application.Services.QuestionAnswers;
 
 namespace PastPaperRepository.Application.Repositories;
 
@@ -49,13 +48,64 @@ public class SpacedRepetitionRepository: ISpacedRepetitionRepository
     }
 
 
-    public Task<List<DeckViewModel>> GetLearningDeckAsync(long userId, CancellationToken token = default)
+    public async Task<List<DeckViewModel>> GetLearningDeckAsync(long userId, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+            {
+                var sql = @"
+                SELECT 
+                    p.PastPaperId,
+                    p.Title,
+                    COUNT(q.Id) AS TotalQuestions
+                FROM LearningDeck ld
+                JOIN PastPapers p ON ld.PastPaperId = p.PastPaperId
+                JOIN QuestionAnswers q ON ld.PastPaperId = q.PastPaperId
+                WHERE ld.UserId = @UserId
+                GROUP BY p.PastPaperId, p.Title";
+
+                var result = await connection.QueryAsync<DeckViewModel>( new CommandDefinition(sql, new { UserId = userId }, cancellationToken: token));
+                return result.ToList();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
-    public Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(string UserId, long pastPaperId, CancellationToken token = default)
+    public async Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(string userId, long pastPaperId, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+            {
+                var sql = @"
+                SELECT
+                    q.Id,
+                    q.PastPaperId,
+                    q.QuestionNumber,
+                    q.Question,
+                    q.Answer
+                FROM LearningDeck ld
+                JOIN PastPapers p ON ld.PastPaperId = p.PastPaperId
+                JOIN QuestionAnswers q ON ld.PastPaperId = q.PastPaperId
+                WHERE ld.UserId = @UserId AND ld.PastPaperId = @PastPaperId
+                ORDER BY ld.Score, ld.NextReviewDate";
+
+                var result = await connection.QueryAsync<QuestionAnswers>(
+                    new CommandDefinition(sql, new { UserId = userId, PastPaperId = pastPaperId }, cancellationToken: token)
+                );
+
+                return result.ToList();
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
