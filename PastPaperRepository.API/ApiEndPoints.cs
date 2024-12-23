@@ -32,4 +32,11 @@ public static class ApiEndPoints
         public const string UpdateRole = $"{ApiBaseUrl}/role/update{{id:int}}";
         public const string DeleteRole = $"{ApiBaseUrl}/role/delete{{id:int}}";
     }
+    
+    public static class Payments
+    {
+        public const string CreatePayment = $"{ApiBaseUrl}/payment/create-checkout-session";
+
+    } 
+  
 }
