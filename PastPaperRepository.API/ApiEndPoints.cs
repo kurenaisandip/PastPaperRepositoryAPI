@@ -35,7 +35,8 @@ public static class ApiEndPoints
     
     public static class Payments
     {
-        public const string CreatePayment = $"{ApiBaseUrl}/payment/create-checkout-session";
+        public const string CheckoutSession = $"{ApiBaseUrl}/payment/create-checkout-session";
+        public const string CreatePayment = $"{ApiBaseUrl}/payment/create-payment";
 
     } 
   
