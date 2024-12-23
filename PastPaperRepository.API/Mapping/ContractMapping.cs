@@ -1,8 +1,10 @@
 ﻿using PastPaperRepository.Application.Models;
 using PastPaperRepository.Application.Models.EducationalEntities;
+using PastPaperRepository.Application.Models.Payment;
 using PastPaperRepository.Application.Models.SpacedRepetition;
 using PastPaperRepository.Contracts.Requests;
 using PastPaperRepository.Contracts.Requests.EducationalEntities;
+using PastPaperRepository.Contracts.Requests.Payments;
 using PastPaperRepository.Contracts.Requests.SpacedRepetition;
 using PastPaperRepository.Contracts.Responses;
 using PastPaperRepository.Contracts.Responses.EducationalEntitiiesReponses;
@@ -151,6 +153,17 @@ public static class ContractMapping
             AddedDate = request.AddedDate,
             NextReviewDate = request.NextReviewDate,
             Status = request.Status,
+        };
+    }
+    
+    public static CreatePaymentModel MapToCreatePaymentModel(this CreatePaymentRequest request)
+    {
+        return new CreatePaymentModel
+        {
+            UserId = request.UserId,
+            ProductName = request.ProductName,
+            Price = request.Price,
+            ValidUntil = request.ValidUntil,
         };
     }
     
