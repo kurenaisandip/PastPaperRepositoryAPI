@@ -3,7 +3,9 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Repositories;
+using PastPaperRepository.Application.Repositories.Payments;
 using PastPaperRepository.Application.Services;
+using PastPaperRepository.Application.Services.Payments;
 
 namespace PastPaperRepository.Application.ApplicationService;
 
@@ -21,6 +23,8 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<ISpacedRepetitionService, SpacedRepetitionService>();
 
         services.AddSingleton<ISpacedRepetitionRepository, SpacedRepetitionRepository>();
+        services.AddSingleton<IPayementRepository, PaymentRepository>();
+        services.AddSingleton<IPaymentService, PaymentService>();
         return services;
     }
 
