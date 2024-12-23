@@ -9,6 +9,7 @@ using PastPaperRepository.API.Mapping;
 using PastPaperRepository.API.Swagger;
 using PastPaperRepository.Application.ApplicationService;
 using PastPaperRepository.Application.Database;
+using Stripe;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -75,6 +76,8 @@ builder.Services.AddApplication();
 builder.Services.AddDatabase(config["Database:ConnectionString"]!);
 
 var app = builder.Build();
+
+StripeConfiguration.ApiKey = app.Configuration["Stripe:SecretKey"];
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
