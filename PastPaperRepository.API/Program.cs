@@ -14,15 +14,14 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add services to the container
 builder.Services.AddApiVersioning(x =>
-    {
-        x.DefaultApiVersion = new ApiVersion(1.0);
-        x.AssumeDefaultVersionWhenUnspecified = true;
-        x.ReportApiVersions = true;
-    })
-    .AddMvc().AddApiExplorer();
+{
+    x.DefaultApiVersion = new ApiVersion(1.0);
+    x.AssumeDefaultVersionWhenUnspecified = true;
+    x.ReportApiVersions = true;
+}).AddMvc().AddApiExplorer();
+
 
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
@@ -34,29 +33,40 @@ builder.Services.AddSwaggerGen(x => x.OperationFilter<SwaggerDefaultValue>());
 
 var config = builder.Configuration;
 
-//JWT configuration
-var jwtIssuer = builder.Configuration.GetSection("Jwt:Issuer").Get<string>();
-
-builder.Services.AddAuthentication(x =>
-    {
-        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(x =>
-    {
-        x.TokenValidationParameters = new TokenValidationParameters
+// Add CORS configuration
+string _defaultCorsPolicyName = "localhost";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: _defaultCorsPolicyName,
+        policy =>
         {
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            ValidateAudience = true,
-            ValidateIssuer = true,
-            ValidAudience = jwtIssuer,
-            ValidIssuer = jwtIssuer,
-        };
-    });
+            policy.WithOrigins("http://127.0.0.1:5500")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
+// JWT configuration
+var jwtIssuer = config.GetSection("Jwt:Issuer").Get<string>();
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidAudience = jwtIssuer,
+        ValidIssuer = jwtIssuer,
+    };
+});
 
 builder.Services.AddAuthorization(x =>
 {
@@ -70,16 +80,17 @@ builder.Services.AddAuthorization(x =>
         ));
 });
 
-// not a good way to DI in the application
-// builder.Services.AddSingleton<IPastPaperRepository, PastPaperRepository>();
+// Application and Database setup
 builder.Services.AddApplication();
 builder.Services.AddDatabase(config["Database:ConnectionString"]!);
+
+builder.Services.AddResponseCaching();
 
 var app = builder.Build();
 
 StripeConfiguration.ApiKey = app.Configuration["Stripe:SecretKey"];
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -87,26 +98,25 @@ if (app.Environment.IsDevelopment())
     {
         foreach (var description in app.DescribeApiVersions())
         {
-            x.SwaggerEndpoint( $"/swagger/{description.GroupName}/swagger.json",
+            x.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
                 description.GroupName);
         }
     });
 }
 
-builder.Services.AddResponseCaching();
-
-app.MapHealthChecks("_health");
-
 app.UseHttpsRedirection();
+
+// Apply CORS middleware
+app.UseCors(_defaultCorsPolicyName);
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseCors();
 app.UseResponseCaching();
 
 app.UseMiddleware<ValidationMappingMiddleware>();
 
+app.MapHealthChecks("_health");
 app.MapControllers();
 
 var dbInitializer = app.Services.GetRequiredService<DbInitalizer>();

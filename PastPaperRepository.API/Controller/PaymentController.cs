@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PastPaperRepository.API.ConfigurationClasses;
 using PastPaperRepository.API.Mapping;
 using PastPaperRepository.Application.Services.Payments;
 using PastPaperRepository.Contracts.Requests.Payments;
@@ -12,12 +11,10 @@ namespace PastPaperRepository.API.Controller;
 public class PaymentController: ControllerBase
 {
     private readonly IPaymentService _paymentService;
-    private readonly ClientSettings _clientSettings;
 
-    public PaymentController(IPaymentService paymentService, ClientSettings clientSettings)
+    public PaymentController(IPaymentService paymentService)
     {
         _paymentService = paymentService;
-        _clientSettings = clientSettings;
     }
 
     [HttpPost(ApiEndPoints.Payments.CreatePayment)]
@@ -71,11 +68,12 @@ public class PaymentController: ControllerBase
         var service = new SessionService();
         Session session = await service.CreateAsync(options, cancellationToken: token);
 
+        return new JsonResult(new { sessionId = session.Id });
         // Set the session URL in the response headers
-        Response.Headers.Add("Location", session.Url);
-
-        // Return a 303 See Other response
-        return new StatusCodeResult(303);
+        // Response.Headers.Add("Location", session.Url);
+        //
+        // // Return a 303 See Other response
+        // return new StatusCodeResult(303);
     }
 
 }
