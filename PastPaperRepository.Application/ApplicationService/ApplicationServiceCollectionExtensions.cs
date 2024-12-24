@@ -5,6 +5,7 @@ using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Repositories;
 using PastPaperRepository.Application.Repositories.Payments;
 using PastPaperRepository.Application.Services;
+using PastPaperRepository.Application.Services.EducationalEntities;
 using PastPaperRepository.Application.Services.Payments;
 
 namespace PastPaperRepository.Application.ApplicationService;
@@ -17,6 +18,7 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<IPastPaperRepository, Repositories.PastPaperRepository>();
         services.AddSingleton<IPastPaperService, Services.PastPaperService>();
         services.AddSingleton<IEducationalEntitiesRepository, EducationalEntitiesRepository>();
+        services.AddSingleton<IEducationalEntitiesService, EducationalEntitiesService>();
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
 
         services.AddSingleton<IUserLoginRepository, UserLoginRepository>();
