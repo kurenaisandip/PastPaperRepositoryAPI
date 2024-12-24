@@ -8,5 +8,5 @@ public interface IEducationalEntitiesRepository
     void CreateSubject();
     void Categories();
 
-    Task<bool> CreateRoleAsync(Roles roles);
+    Task<bool> CreateRoleAsync(Roles roles, CancellationToken token = default);
 }

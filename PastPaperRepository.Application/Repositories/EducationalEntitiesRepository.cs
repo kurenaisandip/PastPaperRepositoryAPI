@@ -1,12 +1,19 @@
-﻿using PastPaperRepository.Application.Models.EducationalEntities;
+﻿using Dapper;
+using PastPaperRepository.Application.Database;
+using PastPaperRepository.Application.Models.EducationalEntities;
 
 namespace PastPaperRepository.Application.Repositories;
 
 public class EducationalEntitiesRepository: IEducationalEntitiesRepository
 {
-    private new List<Roles> data = new();
-    
-    public void CreateSchool()
+   private readonly IDbConnectionFactory _dbConnectionFactory;
+
+   public EducationalEntitiesRepository(IDbConnectionFactory dbConnectionFactory)
+   {
+       _dbConnectionFactory = dbConnectionFactory;
+   }
+
+   public void CreateSchool()
     {
         throw new NotImplementedException();
     }
@@ -21,14 +28,28 @@ public class EducationalEntitiesRepository: IEducationalEntitiesRepository
         throw new NotImplementedException();
     }
 
-    public  Task<bool> CreateRoleAsync(Roles roles)
+    public async Task<bool> CreateRoleAsync(Roles roles, CancellationToken token = default)
     {
-        if (roles is null)
+        using (var connection = await _dbConnectionFactory.CreateConnectionAsync(token))
         {
-            return Task.FromResult(false);
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = "Insert into Roles (role) values (@role)";
+                    
+                    var result = await connection.ExecuteAsync(new CommandDefinition(query, new {role = roles.Name}, transaction, cancellationToken:token));
+                    transaction.Commit();
+                    
+                    return result > 0;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
         }
-         data.Add(roles);
-
-        return Task.FromResult(true);;
     }
 }
