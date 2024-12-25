@@ -13,9 +13,29 @@ public class EducationalEntitiesRepository: IEducationalEntitiesRepository
        _dbConnectionFactory = dbConnectionFactory;
    }
 
-   public void CreateSchool()
+    public async Task<bool> CreateSchoolAsync(School school, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        using (var connection = await _dbConnectionFactory.CreateConnectionAsync(token))
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = "Insert into School (name, location) values (@name, @location)";
+                    
+                    var result = await connection.ExecuteAsync(new CommandDefinition(query, new {name = school.Name, location = school.Address}, transaction, cancellationToken:token));
+                    transaction.Commit();
+                    
+                    return result > 0;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
     }
 
     public void CreateSubject()

@@ -287,7 +287,6 @@
   },
   "packageFolders": {
     "C:\\Users\\ACER\\.nuget\\packages\\": {},
-    "D:\\Amnil\\FIles\\Offline Packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
@@ -300,7 +299,6 @@
       "outputPath": "C:\\Users\\ACER\\RiderProjects\\PastPaperRepositoryAPI\\PastPaperRepository.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "D:\\Amnil\\FIles\\Offline Packages",
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [

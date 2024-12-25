@@ -16,4 +16,9 @@ public class EducationalEntitiesService : IEducationalEntitiesService
     {
         return _repository.CreateRoleAsync(roles, token);
     }
+
+    public Task<bool> CreateSchoolAsync(School school, CancellationToken token = default)
+    {
+        return _repository.CreateSchoolAsync(school, token);
+    }
 }
