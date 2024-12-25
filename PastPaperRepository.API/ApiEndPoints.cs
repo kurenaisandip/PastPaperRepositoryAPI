@@ -29,8 +29,8 @@ public static class ApiEndPoints
     {
         public const string CreateRole = $"{ApiBaseUrl}/role";
         public const string CreateSchool = $"{ApiBaseUrl}/school";
-        public const string UpdateRole = $"{ApiBaseUrl}/role/update{{id:int}}";
-        public const string DeleteRole = $"{ApiBaseUrl}/role/delete{{id:int}}";
+        public const string CreateCategories = $"{ApiBaseUrl}/categories";
+        public const string CreateSubject = $"{ApiBaseUrl}/subject";
     }
     
     public static class Payments
