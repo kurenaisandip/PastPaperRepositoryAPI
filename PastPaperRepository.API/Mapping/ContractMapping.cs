@@ -176,4 +176,22 @@ public static class ContractMapping
         };
     }
     
+    public static Subject MapToSubject(this CreateSubjectRequest request)
+    {
+        return new Subject
+        {
+           SubjectName = request.SubjectName,
+              Description = request.Description
+        };
+    }
+    
+    public static Categories MapToCategories(this CreateCategoriesRequest request)
+    {
+        return new Categories
+        {
+            CategoryName = request.CategoryName,
+            CategoryDescription = request.Description
+        };
+    }
+    
 }
