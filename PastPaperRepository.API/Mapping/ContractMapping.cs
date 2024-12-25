@@ -167,4 +167,13 @@ public static class ContractMapping
         };
     }
     
+    public static School MapToSchool(this CreateSchoolRequest request)
+    {
+        return new School
+        {
+            Name = request.Name,
+            Address = request.Address,
+        };
+    }
+    
 }
