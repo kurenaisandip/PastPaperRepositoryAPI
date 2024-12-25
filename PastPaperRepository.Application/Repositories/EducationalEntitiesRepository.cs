@@ -38,15 +38,60 @@ public class EducationalEntitiesRepository: IEducationalEntitiesRepository
         }
     }
 
-    public void CreateSubject()
+    public async Task<bool> CreateSubjectAsync(Subject subject, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        using (var connection = await _dbConnectionFactory.CreateConnectionAsync(token) )
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = "Insert into Subject (name, description) values (@name, @description)";
+                    
+                    var result = await connection.ExecuteAsync(new CommandDefinition("""
+                        query
+                    """, new {name = subject.SubjectName, description = subject.Description}, transaction, cancellationToken:token));
+                    transaction.Commit();
+
+                    return result > 0;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
     }
 
-    public void Categories()
+    public async Task<bool> CreateCategoryAsync(Categories categories, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        using (var connection = await _dbConnectionFactory.CreateConnectionAsync(token) )
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = "Insert into Categories (name, description) values (@name, @description)";
+                    
+                    var result = await connection.ExecuteAsync(new CommandDefinition("""
+                            query
+                        """, new {name = categories.CategoryName, description = categories.CategoryDescription}, transaction, cancellationToken:token));
+                    transaction.Commit();
+
+                    return result > 0;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
     }
+
 
     public async Task<bool> CreateRoleAsync(Roles roles, CancellationToken token = default)
     {

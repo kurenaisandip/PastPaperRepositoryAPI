@@ -21,4 +21,14 @@ public class EducationalEntitiesService : IEducationalEntitiesService
     {
         return _repository.CreateSchoolAsync(school, token);
     }
+
+    public Task<bool> CreateSubjectAsync(Subject subject, CancellationToken token = default)
+    {
+        return _repository.CreateSubjectAsync(subject, token);
+    }
+
+    public Task<bool> CreateCategoryAsync(Categories categories, CancellationToken token = default)
+    {
+        return _repository.CreateCategoryAsync(categories, token);
+    }
 }

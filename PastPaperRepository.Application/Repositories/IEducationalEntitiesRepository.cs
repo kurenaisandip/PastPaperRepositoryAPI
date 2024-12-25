@@ -5,8 +5,8 @@ namespace PastPaperRepository.Application.Repositories;
 public interface IEducationalEntitiesRepository
 {
     Task<bool> CreateSchoolAsync(School school, CancellationToken token = default);
-    void CreateSubject();
-    void Categories();
+    Task<bool> CreateSubjectAsync(Subject subject, CancellationToken token = default);
+    Task<bool> CreateCategoryAsync(Categories categories, CancellationToken token = default);
 
     Task<bool> CreateRoleAsync(Roles roles, CancellationToken token = default);
 }
