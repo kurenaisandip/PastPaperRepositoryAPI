@@ -36,4 +36,30 @@ public class EducationalEntitiesController : ControllerBase
 
         return Ok(response);
     }
+
+    [HttpPost(ApiEndPoints.EducationalEntities.CreateSchool)]
+    public async Task<IActionResult> CreateSchool([FromBody] CreateSchoolRequest request, CancellationToken token)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+        
+        if (string.IsNullOrWhiteSpace(request.Name) && string.IsNullOrWhiteSpace(request.Address))
+        {
+            return BadRequest("School name and location are required and cannot be empty.");
+        }
+
+        var school = request.MapToSchool();
+        
+        var result = await _service.CreateSchoolAsync(school, token);
+
+        if (!result)
+        {
+            return BadRequest();
+        }
+
+        return Ok();
+    }
+    
 }
