@@ -9,7 +9,7 @@ namespace PastPaperRepository.API.Controller;
 [ApiController]
 public class EducationalEntitiesController : ControllerBase
 {
-    public readonly IEducationalEntitiesService _service;
+    private readonly IEducationalEntitiesService _service;
 
     public EducationalEntitiesController(IEducationalEntitiesService service)
     {
@@ -59,6 +59,55 @@ public class EducationalEntitiesController : ControllerBase
             return BadRequest();
         }
 
+        return Ok();
+    }
+    
+    [HttpPost(ApiEndPoints.EducationalEntities.CreateSubject)]
+    public async Task<IActionResult>CreateSubject([FromBody] CreateSubjectRequest request, CancellationToken token)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+        
+        if (string.IsNullOrWhiteSpace(request.SubjectName))
+        {
+            return BadRequest("Subject name is required and cannot be empty.");
+        }
+
+        var subject = request.MapToSubject();
+        
+     var result = await _service.CreateSubjectAsync(subject, token);
+
+     if (!result)
+     {
+         return BadRequest();
+     }
+        return Ok();
+    }
+    
+        
+    [HttpPost(ApiEndPoints.EducationalEntities.CreateCategories)]
+    public async Task<IActionResult>CreateCategory([FromBody] CreateCategoriesRequest request, CancellationToken token)
+    {
+        if (request == null)
+        {
+            return BadRequest();
+        }
+        
+        if (string.IsNullOrWhiteSpace(request.CategoryName))
+        {
+            return BadRequest("Subject name is required and cannot be empty.");
+        }
+
+        var categories = request.MapToCategories();
+        
+        var result = await _service.CreateCategoryAsync(categories, token);
+
+        if (!result)
+        {
+            return BadRequest();
+        }
         return Ok();
     }
     
