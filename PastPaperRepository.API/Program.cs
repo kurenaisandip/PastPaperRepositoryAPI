@@ -3,6 +3,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PastPaperRepository.API;
 using PastPaperRepository.API.Auth;
 using PastPaperRepository.API.Health;
 using PastPaperRepository.API.Mapping;
@@ -85,6 +86,12 @@ builder.Services.AddApplication();
 builder.Services.AddDatabase(config["Database:ConnectionString"]!);
 
 builder.Services.AddResponseCaching();
+
+builder.Services.AddSingleton<MailgunEmailSender>(sp => new MailgunEmailSender(
+    builder.Configuration["Mailgun:ApiKey"]!,
+    builder.Configuration["Mailgun:Domain"]!
+));
+
 
 var app = builder.Build();
 
