@@ -14,11 +14,13 @@ public class LoginController : ControllerBase
 {
     private readonly IUserLoginRepository _userLoginRepository;
     private IConfiguration _config;
+    private readonly MailgunEmailSender _mailgunEmailSender;
 
-    public LoginController(IUserLoginRepository userLoginRepository, IConfiguration config)
+    public LoginController(IUserLoginRepository userLoginRepository, IConfiguration config, MailgunEmailSender mailgunEmailSender)
     {
         _userLoginRepository = userLoginRepository;
         _config = config;
+        _mailgunEmailSender = mailgunEmailSender;
     }
 
     [HttpPost(ApiEndPoints.Login.LoginUser)]
@@ -56,12 +58,18 @@ public class LoginController : ControllerBase
         
         var user = registerUser.MapToUsersRegister();
         
-        var result = await _userLoginRepository.Register(user);
+        var subject = "Welcome to Past Paper Repository";
+        
+      var istrue =  _mailgunEmailSender.SendEmailAsync(user.Email, subject, "Welcome to Past Paper Repository. You have successfully registered.");
 
-        if (!result)
-        {
-            return StatusCode(500, "An error occurred while creating the user.");
-        }
+
+
+      // var result = await _userLoginRepository.Register(user);
+      //
+      //   if (!result)
+      //   {
+      //       return StatusCode(500, "An error occurred while creating the user.");
+      //   }
         
         return Ok("User created successfully.");
     }
