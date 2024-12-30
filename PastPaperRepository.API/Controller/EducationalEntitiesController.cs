@@ -19,6 +19,7 @@ public class EducationalEntitiesController : ControllerBase
     [HttpPost(ApiEndPoints.EducationalEntities.CreateRole)]
     public async Task<IActionResult> CreateRole([FromBody] CreateRoleRequest request, CancellationToken token)
     {
+        throw new Exception("Test exception for Sentry");
         if (request == null)
         {
             return BadRequest("Request body cannot be null.");
