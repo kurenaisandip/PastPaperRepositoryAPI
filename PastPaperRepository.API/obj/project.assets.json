@@ -898,6 +898,41 @@
           "buildTransitive/Sentry.Profiling.targets": {}
         }
       },
+      "Seq.Api/2024.3.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "Tavis.UriTemplates": "2.0.0"
+        },
+        "compile": {
+          "lib/net6.0/Seq.Api.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Seq.Api.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Seq.Extensions.Logging/9.0.0-dev-00129": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "9.0.0",
+          "Microsoft.Extensions.Logging": "9.0.0",
+          "Microsoft.Extensions.Logging.Configuration": "9.0.0"
+        },
+        "compile": {
+          "lib/net8.0/Seq.Extensions.Logging.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Seq.Extensions.Logging.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "SQLite/3.13.0": {
         "type": "package",
         "compile": {
@@ -1158,6 +1193,15 @@
         },
         "build": {
           "buildTransitive/net6.0/System.Text.Json.targets": {}
+        }
+      },
+      "Tavis.UriTemplates/2.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Tavis.UriTemplates.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Tavis.UriTemplates.dll": {}
         }
       },
       "PastPaperRepository.Application/1.0.0": {
@@ -2728,6 +2772,41 @@
         "sentry.profiling.nuspec"
       ]
     },
+    "Seq.Api/2024.3.0": {
+      "sha512": "5OwfjrLqwJPXtYHpfThpfdRMHe701HcAFzSrZSMq3Lsysr7zTpsOWlfl/SJCZxRRe0xYgK8Zx9md9FpmdoUnnw==",
+      "type": "package",
+      "path": "seq.api/2024.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/Seq.Api.dll",
+        "lib/net6.0/Seq.Api.xml",
+        "lib/netstandard2.0/Seq.Api.dll",
+        "lib/netstandard2.0/Seq.Api.xml",
+        "seq-api-icon.png",
+        "seq.api.2024.3.0.nupkg.sha512",
+        "seq.api.nuspec"
+      ]
+    },
+    "Seq.Extensions.Logging/9.0.0-dev-00129": {
+      "sha512": "adpXq1f8/+kLHkrgCB7i8K1Zc3HwriNTNQ14bWDhbGQdI38hzleQQEUs/Jwj+1srXkCGXIcBhOnMvvrhCznV5Q==",
+      "type": "package",
+      "path": "seq.extensions.logging/9.0.0-dev-00129",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net8.0/Seq.Extensions.Logging.dll",
+        "lib/net8.0/Seq.Extensions.Logging.xml",
+        "lib/net9.0/Seq.Extensions.Logging.dll",
+        "lib/net9.0/Seq.Extensions.Logging.xml",
+        "lib/netstandard2.0/Seq.Extensions.Logging.dll",
+        "lib/netstandard2.0/Seq.Extensions.Logging.xml",
+        "seq.extensions.logging.9.0.0-dev-00129.nupkg.sha512",
+        "seq.extensions.logging.nuspec"
+      ]
+    },
     "SQLite/3.13.0": {
       "sha512": "MJfRiz2p6aMVOxrxGMdVzhpzI0oxTgZSwC8eVuOpV8L7yYaFUu8q/OFYwv9P0/aZ/pdEu24O6gma6wZJMTun9A==",
       "type": "package",
@@ -3123,6 +3202,18 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Tavis.UriTemplates/2.0.0": {
+      "sha512": "GbetWNcPIaXvWtanHlBqlEp2KflFrsJf8RBNXmI8Yyeft9CSGxNrcsoKWEiEzyrn7gGVQ25ZC6ep9UfWPR0Otw==",
+      "type": "package",
+      "path": "tavis.uritemplates/2.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/Tavis.UriTemplates.dll",
+        "tavis.uritemplates.2.0.0.nupkg.sha512",
+        "tavis.uritemplates.nuspec"
+      ]
+    },
     "PastPaperRepository.Application/1.0.0": {
       "type": "project",
       "path": "../PastPaperRepository.Application/PastPaperRepository.Application.csproj",
@@ -3154,6 +3245,8 @@
       "Sentry.AspNetCore >= 5.0.0",
       "Sentry.OpenTelemetry >= 5.0.0",
       "Sentry.Profiling >= 5.0.0",
+      "Seq.Api >= 2024.3.0",
+      "Seq.Extensions.Logging >= 9.0.0-dev-00129",
       "Stripe.net >= 47.2.0",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
@@ -3281,6 +3374,14 @@
           "Sentry.Profiling": {
             "target": "Package",
             "version": "[5.0.0, )"
+          },
+          "Seq.Api": {
+            "target": "Package",
+            "version": "[2024.3.0, )"
+          },
+          "Seq.Extensions.Logging": {
+            "target": "Package",
+            "version": "[9.0.0-dev-00129, )"
           },
           "Stripe.net": {
             "target": "Package",

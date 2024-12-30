@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "lrTajlC/f6o=",
+  "dgSpecHash": "1Cj1cMFrUaU=",
   "success": true,
   "projectFilePath": "C:\\Users\\ACER\\RiderProjects\\PastPaperRepositoryAPI\\PastPaperRepository.API\\PastPaperRepository.API.csproj",
   "expectedPackageFiles": [
@@ -54,6 +54,8 @@
     "C:\\Users\\ACER\\.nuget\\packages\\sentry.extensions.logging\\5.0.0\\sentry.extensions.logging.5.0.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\sentry.opentelemetry\\5.0.0\\sentry.opentelemetry.5.0.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\sentry.profiling\\5.0.0\\sentry.profiling.5.0.0.nupkg.sha512",
+    "C:\\Users\\ACER\\.nuget\\packages\\seq.api\\2024.3.0\\seq.api.2024.3.0.nupkg.sha512",
+    "C:\\Users\\ACER\\.nuget\\packages\\seq.extensions.logging\\9.0.0-dev-00129\\seq.extensions.logging.9.0.0-dev-00129.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\sqlite\\3.13.0\\sqlite.3.13.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\stripe.net\\47.2.0\\stripe.net.47.2.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\stub.system.data.sqlite.core.netstandard\\1.0.119\\stub.system.data.sqlite.core.netstandard.1.0.119.nupkg.sha512",
@@ -67,7 +69,8 @@
     "C:\\Users\\ACER\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.0\\system.diagnostics.eventlog.8.0.0.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\system.identitymodel.tokens.jwt\\7.1.2\\system.identitymodel.tokens.jwt.7.1.2.nupkg.sha512",
     "C:\\Users\\ACER\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
-    "C:\\Users\\ACER\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512"
+    "C:\\Users\\ACER\\.nuget\\packages\\system.text.json\\8.0.5\\system.text.json.8.0.5.nupkg.sha512",
+    "C:\\Users\\ACER\\.nuget\\packages\\tavis.uritemplates\\2.0.0\\tavis.uritemplates.2.0.0.nupkg.sha512"
   ],
   "logs": []
 }

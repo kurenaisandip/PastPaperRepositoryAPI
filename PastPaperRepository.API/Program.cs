@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using PastPaperRepository.API;
 using PastPaperRepository.API.Auth;
@@ -13,6 +14,7 @@ using PastPaperRepository.API.Mapping;
 using PastPaperRepository.API.Swagger;
 using PastPaperRepository.Application.ApplicationService;
 using PastPaperRepository.Application.Database;
+using Sentry.Infrastructure;
 using Sentry.OpenTelemetry;
 using Stripe;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -23,14 +25,24 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddOpenTelemetry(options =>
 {
-    options.AddConsoleExporter();
-    // options.AddOtlpExporter(a =>
-    //     {
-    //         a.Endpoint = new Uri("http://localhost:5341/inject/oltp/v1/logs");
-    //         a.Protocol = OtlpExportProtocol.HttpProtobuf;
-    //         a.Headers = "X-Seq-ApiKey=sJtJA0gJhqPIhN2ZLBbC";
-    //     }
-    // );
+    // options.AddConsoleExporter();   
+    options.SetResourceBuilder(ResourceBuilder.CreateEmpty().AddService("PastPaperRepository.API").AddAttributes(new Dictionary<string, object>()
+    {
+        ["deployment.environment"] = builder.Environment.EnvironmentName,
+    }));
+
+    options.IncludeScopes = true;
+    
+    options.IncludeFormattedMessage = true;
+
+    options.AddOtlpExporter(a =>
+        {
+            a.Protocol = OtlpExportProtocol.HttpProtobuf;
+            a.Endpoint = new Uri("http://localhost:5341/ingest/otlp/v1/logs");
+            a.Headers = "X-Seq-ApiKey=sJtJA0gJhqPIhN2ZLBbC";
+            // a.AddHeader("X-Seq-ApiKey", "sJtJA0gJhqPIhN2ZLBbC");
+        }
+    );
 });
 
 
@@ -143,6 +155,10 @@ SentrySdk.Init(options =>
     // We enable it here for demonstration purposes when first trying Sentry.
     // You shouldn't do this in your applications unless you're troubleshooting issues with Sentry.
     options.Debug = true;
+    
+    options.DiagnosticLevel = SentryLevel.Debug;
+    
+    options.DiagnosticLogger = new FileDiagnosticLogger("D:/Applications/Sentry/sentry-diagnostic.log");
 
     // This option is recommended. It enables Sentry's "Release Health" feature.
     options.AutoSessionTracking = true;

@@ -24,6 +24,8 @@
         <PackageReference Include="Sentry.AspNetCore" Version="5.0.0" />
         <PackageReference Include="Sentry.OpenTelemetry" Version="5.0.0" />
         <PackageReference Include="Sentry.Profiling" Version="5.0.0" />
+        <PackageReference Include="Seq.Api" Version="2024.3.0" />
+        <PackageReference Include="Seq.Extensions.Logging" Version="9.0.0-dev-00129" />
         <PackageReference Include="Stripe.net" Version="47.2.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
