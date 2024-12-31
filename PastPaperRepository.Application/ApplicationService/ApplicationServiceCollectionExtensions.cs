@@ -16,6 +16,7 @@ public static class ApplicationServiceCollectionExtensions
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton<IPastPaperRepository, Repositories.PastPaperRepository>();
+        services.Decorate<IPastPaperRepository, CachedPastPaperRepository>();
         services.AddSingleton<IPastPaperService, Services.PastPaperService>();
         services.AddSingleton<IEducationalEntitiesRepository, EducationalEntitiesRepository>();
         services.AddSingleton<IEducationalEntitiesService, EducationalEntitiesService>();
@@ -27,6 +28,8 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<ISpacedRepetitionRepository, SpacedRepetitionRepository>();
         services.AddSingleton<IPayementRepository, PaymentRepository>();
         services.AddSingleton<IPaymentService, PaymentService>();
+        
+        
         return services;
     }
 
