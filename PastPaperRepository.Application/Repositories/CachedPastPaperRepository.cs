@@ -5,10 +5,10 @@ namespace PastPaperRepository.Application.Repositories;
 
 public class CachedPastPaperRepository : IPastPaperRepository
 {
-    private readonly PastPaperRepository _decorated;
+    private readonly IPastPaperRepository _decorated;
     private readonly IMemoryCache _memoryCache;
 
-    public CachedPastPaperRepository(PastPaperRepository decorated, IMemoryCache memoryCache)
+    public CachedPastPaperRepository(IPastPaperRepository decorated, IMemoryCache memoryCache)
     {
         _decorated = decorated;
         _memoryCache = memoryCache;

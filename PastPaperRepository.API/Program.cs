@@ -58,6 +58,7 @@ builder.Services.AddApiVersioning(x =>
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
 builder.Services.AddControllers();
+builder.Services.AddMemoryCache();
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>(DatabaseHealthCheck.Name);
 builder.Services.AddEndpointsApiExplorer();

@@ -64,12 +64,12 @@ public class LoginController : ControllerBase
 
 
 
-      // var result = await _userLoginRepository.Register(user);
-      //
-      //   if (!result)
-      //   {
-      //       return StatusCode(500, "An error occurred while creating the user.");
-      //   }
+      var result = await _userLoginRepository.Register(user);
+      
+        if (!result)
+        {
+            return StatusCode(500, "An error occurred while creating the user.");
+        }
         
         return Ok("User created successfully.");
     }

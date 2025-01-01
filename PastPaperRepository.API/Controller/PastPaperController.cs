@@ -37,7 +37,7 @@ public class PastPaperController : ControllerBase
        return CreatedAtAction(nameof(GetPastPaper), new { id = response.PastPaperId }, response);
     }
     
-    // [AllowAnonymous]
+    [AllowAnonymous]
     [ResponseCache(Duration = 30, VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any)]
     [HttpGet(ApiEndPoints.PastPaper.Get)]
     public async Task<IActionResult> GetPastPaper([FromRoute] string id, CancellationToken token)
