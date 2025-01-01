@@ -25,7 +25,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddOpenTelemetry(options =>
 {
-    // options.AddConsoleExporter();   
+    options.AddConsoleExporter();   
     options.SetResourceBuilder(ResourceBuilder.CreateEmpty().AddService("PastPaperRepository.API").AddAttributes(new Dictionary<string, object>()
     {
         ["deployment.environment"] = builder.Environment.EnvironmentName,
@@ -46,6 +46,8 @@ builder.Logging.AddOpenTelemetry(options =>
 });
 
 
+
+
 // Add services to the container
 builder.Services.AddApiVersioning(x =>
 {
@@ -59,6 +61,11 @@ builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwa
 
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    string connection = builder.Configuration.GetConnectionString("Redis");
+    options.Configuration = connection;
+});
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>(DatabaseHealthCheck.Name);
 builder.Services.AddEndpointsApiExplorer();

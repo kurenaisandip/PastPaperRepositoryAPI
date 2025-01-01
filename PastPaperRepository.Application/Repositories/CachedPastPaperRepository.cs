@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using PastPaperRepository.Application.Models;
 
 namespace PastPaperRepository.Application.Repositories;
@@ -6,12 +10,12 @@ namespace PastPaperRepository.Application.Repositories;
 public class CachedPastPaperRepository : IPastPaperRepository
 {
     private readonly IPastPaperRepository _decorated;
-    private readonly IMemoryCache _memoryCache;
+    private readonly IDistributedCache _distributedCache;
 
-    public CachedPastPaperRepository(IPastPaperRepository decorated, IMemoryCache memoryCache)
+    public CachedPastPaperRepository(IPastPaperRepository decorated, IDistributedCache distributedCache)
     {
         _decorated = decorated;
-        _memoryCache = memoryCache;
+        _distributedCache = distributedCache;
     }
 
     public Task<bool> CreatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default)
@@ -22,12 +26,26 @@ public class CachedPastPaperRepository : IPastPaperRepository
     public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, CancellationToken token = default)
     {
         string cacheKey = $"PastPaper_{pastPaperId}";
-        // return _decorated.GetPastPaperByIdAsync(pastPaperId, token);
-        return await _memoryCache.GetOrCreateAsync(cacheKey, entry =>
+      
+        string? cachedPastPaper = await _distributedCache.GetStringAsync(cacheKey, token);
+
+        PastPapers? pastPaper;
+        if (string.IsNullOrEmpty(cachedPastPaper))
         {
-            entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-            return _decorated.GetPastPaperByIdAsync(pastPaperId, token);
-        });
+             pastPaper = await _decorated.GetPastPaperByIdAsync(pastPaperId, token);
+
+            if (pastPaper is null)
+            {
+                return pastPaper;
+            }
+
+            await _distributedCache.SetStringAsync(cacheKey, JsonSerializer.Serialize(pastPaper), token);
+            return pastPaper;
+        }
+        
+        pastPaper = JsonSerializer.Deserialize<PastPapers>(cachedPastPaper);
+
+        return pastPaper;
     }
 
     public Task<PastPapers?> GetPastPaperBySlugAsync(string slug, CancellationToken token = default)
