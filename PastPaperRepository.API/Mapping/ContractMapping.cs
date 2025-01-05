@@ -194,4 +194,15 @@ public static class ContractMapping
         };
     }
     
+    public static LoggedInUserDetails MapToLoggedInUserDetails(this SendUserDataRequest user)
+    {
+        return new LoggedInUserDetails
+        {
+            InstitutionName = user.InstitutionName,
+            Grade = user.Grade,
+            Semester = user.Semester,
+            PhoneNumber = user.PhoneNumber,
+            AcademicBackground = user.AcademicBackground
+        };
+    }
 }
