@@ -2,10 +2,11 @@
 
 public class LoggedInUserDetails
 {
+    public int UserId { get; set; }
     public string? InstitutionName { get; set; }
     public string? Grade { get; set; }
     public string? Semester { get; set; }
-    public int PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
     public string? AcademicBackground { get; set; }
     
 }

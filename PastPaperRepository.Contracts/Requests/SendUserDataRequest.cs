@@ -4,6 +4,7 @@ namespace PastPaperRepository.Contracts.Requests;
 
 public class SendUserDataRequest
 {
+    public int UserId { get; init; }
     [Required(ErrorMessage = "InstitutionName is required.")]
     public string? InstitutionName { get; init; }
 
@@ -14,8 +15,8 @@ public class SendUserDataRequest
     public string? Semester { get; init; }
 
     [Required(ErrorMessage = "PhoneNumber is required.")]
-    [Range(1000000000, 9999999999, ErrorMessage = "PhoneNumber must be a 10-digit number.")]
-    public int PhoneNumber { get; init; }
+    // [Range(1000000000, 9999999999, ErrorMessage = "PhoneNumber must be a 10-digit number.")]
+    public string PhoneNumber { get; init; }
 
     [Required(ErrorMessage = "AcademicBackground is required.")]
      public string? AcademicBackground { get; init; }
