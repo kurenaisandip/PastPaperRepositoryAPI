@@ -23,6 +23,8 @@ public static class ApiEndPoints
     {
         public const string LoginUser = $"{ApiBaseUrl}/login";
         public const string RegisterUser = $"{ApiBaseUrl}/register";
+        public const string ForgotPassword = $"{ApiBaseUrl}/forgot-password";
+        public const string SendUserData = $"{ApiBaseUrl}/send-user-data";
     }
     
     public static class EducationalEntities
