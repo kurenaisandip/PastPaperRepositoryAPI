@@ -26,7 +26,9 @@ public class LoginController : ControllerBase
     [HttpPost(ApiEndPoints.Login.LoginUser)]
     public async Task<IActionResult> Login([FromBody] LogInUser logInUser)
     {
+        Console.WriteLine("Login");
         var user = logInUser.MapToUsersLogin();
+        Console.WriteLine(user.Email, user.Password);
         var result = await _userLoginRepository.Login(user);
 
         if (!result)
@@ -45,7 +47,7 @@ public class LoginController : ControllerBase
         var token =  new JwtSecurityTokenHandler().WriteToken(Sectoken);
     
         //sends the token in the body in the response
-        return Ok(token);
+        return Ok(new { accessToken = token });
     }
     
     [HttpPost(ApiEndPoints.Login.RegisterUser)]
@@ -58,9 +60,9 @@ public class LoginController : ControllerBase
         
         var user = registerUser.MapToUsersRegister();
         
-        var subject = "Welcome to Past Paper Repository";
+        //var subject = "Welcome to Past Paper Repository";
         
-      var istrue =  _mailgunEmailSender.SendEmailAsync(user.Email, subject, "Welcome to Past Paper Repository. You have successfully registered.");
+      //var istrue =  _mailgunEmailSender.SendEmailAsync(user.Email, subject, "Welcome to Past Paper Repository. You have successfully registered.");
 
 
 
@@ -73,4 +75,11 @@ public class LoginController : ControllerBase
         
         return Ok("User created successfully.");
     }
+
+    // [HttpPost(ApiEndPoints.Login.SendUserData)]
+    // public async Task<IActionResult> SendUserData([FromBody] SendUserDataRequest request, CancellationToken token)
+    // {
+    //     var userData = request.MapToLoggedInUserDetails();
+    //     var result = await _userLoginRepository.SendUserData(userData);
+    // }
 }
