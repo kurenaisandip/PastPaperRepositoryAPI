@@ -76,10 +76,16 @@ public class LoginController : ControllerBase
         return Ok("User created successfully.");
     }
 
-    // [HttpPost(ApiEndPoints.Login.SendUserData)]
-    // public async Task<IActionResult> SendUserData([FromBody] SendUserDataRequest request, CancellationToken token)
-    // {
-    //     var userData = request.MapToLoggedInUserDetails();
-    //     var result = await _userLoginRepository.SendUserData(userData);
-    // }
+    [HttpPost(ApiEndPoints.Login.SendUserData)]
+    public async Task<IActionResult> SendUserData([FromBody] SendUserDataRequest request, CancellationToken token)
+    {
+        var userData = request.MapToLoggedInUserDetails();
+        var result = await _userLoginRepository.SaveLoggedInUserDetails(userData, token);
+        if (!result)
+        {
+            return StatusCode(500, "An error occurred while saving the user data.");
+        }
+        
+        return Ok("User data saved successfully.");
+    }
 }

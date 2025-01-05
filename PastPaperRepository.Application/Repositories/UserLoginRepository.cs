@@ -96,5 +96,48 @@ public class UserLoginRepository : IUserLoginRepository
             }
         }
     }
+
+    public async Task<bool> SaveLoggedInUserDetails(LoggedInUserDetails userDetails, CancellationToken token = default)
+    {
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = @"
+                    INSERT INTO LoggedinUser 
+                    (user_id, institution_name, phone_number, gradeId, academic_background, optional_subject, IsUserDataComplete) 
+                    VALUES (@UserId, @InstitutionName, @PhoneNumber, @Grade, @AcademicBackground, @Semester, @IsCompleted)";
+
+                    var rowsAffected = await connection.ExecuteAsync(new CommandDefinition(
+                        query,
+                        new
+                        {
+                            userDetails.UserId,
+                            userDetails.InstitutionName,
+                            userDetails.PhoneNumber,
+                            userDetails.Grade,
+                            userDetails.AcademicBackground,
+                            userDetails.Semester, 
+                            IsCompleted = 1 
+                        },
+                        transaction,
+                        cancellationToken: token
+                    ));
+
+                    transaction.Commit();
+                    return rowsAffected > 0;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback(); // Rollback transaction in case of an error
+                    Console.WriteLine($"Error saving user details: {e.Message}");
+                    throw;
+                }
+            }
+        }
+    }
+
 }
 

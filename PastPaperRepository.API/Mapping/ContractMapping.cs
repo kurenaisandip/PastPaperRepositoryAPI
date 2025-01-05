@@ -44,10 +44,10 @@ public static class ContractMapping
             ExamBoard = pastPaper.ExamBoard,
             FilePath = pastPaper.FilePath
         };
-
     }
 
-    public static PastPapersResponse MapToPastPapersResponse(this IEnumerable<PastPapers> pastPapers, int page, int pageSize,int totalCount)
+    public static PastPapersResponse MapToPastPapersResponse(this IEnumerable<PastPapers> pastPapers, int page,
+        int pageSize, int totalCount)
     {
         return new PastPapersResponse()
         {
@@ -57,7 +57,6 @@ public static class ContractMapping
             TotalCount = totalCount
         };
     }
-
     
     public static PastPapers MapToPastPapers(this UpdatePastPaperRequest request, string id)
     {
@@ -74,7 +73,7 @@ public static class ContractMapping
             FilePath = request.FilePath
         };
     }
-    
+
     public static UpdatePastPaperResponse MapToUpdatedPastPaper(this PastPapers response)
     {
         return new UpdatePastPaperResponse()
@@ -90,7 +89,7 @@ public static class ContractMapping
             FilePath = response.FilePath
         };
     }
-    
+
     public static UsersLogin MapToUsersLogin(this LogInUser request)
     {
         return new UsersLogin()
@@ -98,7 +97,8 @@ public static class ContractMapping
             Email = request.Email,
             Password = request.Password
         };
-    } 
+    }
+
     public static UsersLogin MapToUsersRegister(this RegisterUser request)
     {
         return new UsersLogin()
@@ -108,7 +108,7 @@ public static class ContractMapping
             Password = request.Password
         };
     }
-    
+
     public static GetAllPastPapersOptions MapToGetAllPastPapersOptions(this GetAllPastPapersRequest request)
     {
         return new GetAllPastPapersOptions()
@@ -116,13 +116,13 @@ public static class ContractMapping
             Title = request.Title,
             Year = request.Year,
             SortField = request.SortBy?.Trim('+', '-'),
-            SortOrder = request.SortBy is null ? SortOrder.UnSorted : request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending,
+            SortOrder = request.SortBy is null ? SortOrder.UnSorted :
+                request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending,
             Page = request.Page,
             PageSize = request.PageSize,
-            
         };
     }
-    
+
     public static GetAllPastPapersOptions WithUserId(this GetAllPastPapersOptions options, string? userId)
     {
         options.UserID = userId;
@@ -135,7 +135,8 @@ public static class ContractMapping
         {
             Name = request.Name
         };
-    }  
+    }
+
     public static RoleResponse MapToResponseRole(this Roles request)
     {
         return new RoleResponse
@@ -143,7 +144,7 @@ public static class ContractMapping
             Name = request.Name
         };
     }
-    
+
     public static LearningDeck MapToLearningDeck(this CreateLearningDeckRequest request)
     {
         return new LearningDeck
@@ -155,7 +156,7 @@ public static class ContractMapping
             Status = request.Status,
         };
     }
-    
+
     public static CreatePaymentModel MapToCreatePaymentModel(this CreatePaymentRequest request)
     {
         return new CreatePaymentModel
@@ -166,7 +167,7 @@ public static class ContractMapping
             ValidUntil = request.ValidUntil,
         };
     }
-    
+
     public static School MapToSchool(this CreateSchoolRequest request)
     {
         return new School
@@ -175,16 +176,16 @@ public static class ContractMapping
             Address = request.Address,
         };
     }
-    
+
     public static Subject MapToSubject(this CreateSubjectRequest request)
     {
         return new Subject
         {
-           SubjectName = request.SubjectName,
-              Description = request.Description
+            SubjectName = request.SubjectName,
+            Description = request.Description
         };
     }
-    
+
     public static Categories MapToCategories(this CreateCategoriesRequest request)
     {
         return new Categories
@@ -198,6 +199,7 @@ public static class ContractMapping
     {
         return new LoggedInUserDetails
         {
+            UserId = user.UserId,
             InstitutionName = user.InstitutionName,
             Grade = user.Grade,
             Semester = user.Semester,
