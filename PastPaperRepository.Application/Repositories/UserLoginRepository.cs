@@ -150,6 +150,7 @@ public class UserLoginRepository : IUserLoginRepository
                     var query = @"
                     select 
                         u.user_id as Id, 
+                        l.IsUserDataComplete,
                         u.user_name as Name,
                         case 
                             when p.user_id is not null then 'paid'
@@ -157,6 +158,7 @@ public class UserLoginRepository : IUserLoginRepository
                         end as UserType
                     from Users as u
                     left join Payments as p on u.user_id = p.user_id
+                    left join LoggedInUser as l on u.user_id = l.user_id
                     where u.email = @Email";
 
                     // Use an anonymous object to bind the email parameter

@@ -45,7 +45,8 @@ public class LoginController : ControllerBase
             new Claim("role", "User"),
             new Claim("userId", userData.Id.ToString()),
             new Claim("name", userData.Name),
-            new Claim("userType", userData.UserType)
+            new Claim("userType", userData.UserType),
+            new Claim("isUserDataComplete", userData.IsUserDataComplete.ToString())
         };
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
