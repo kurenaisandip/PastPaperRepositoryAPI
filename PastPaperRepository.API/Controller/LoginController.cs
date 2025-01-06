@@ -39,6 +39,13 @@ public class LoginController : ControllerBase
 
         var userData = await _userLoginRepository.GetUserClaimModel(user.Email);
 
+        var boolvalue = false;
+
+        if (userData.IsUserDataComplete == 1)
+        {
+            boolvalue = true;
+        }
+
         var claims = new List<Claim>
         {
             new Claim("email", user.Email),
@@ -46,7 +53,7 @@ public class LoginController : ControllerBase
             new Claim("userId", userData.Id.ToString()),
             new Claim("name", userData.Name),
             new Claim("userType", userData.UserType),
-            new Claim("isUserDataComplete", userData.IsUserDataComplete.ToString())
+            new Claim("isUserDataComplete", boolvalue.ToString())
         };
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
