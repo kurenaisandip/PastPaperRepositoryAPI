@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -35,12 +36,23 @@ public class LoginController : ControllerBase
         {
             return NotFound();
         }
+
+        var userData = await _userLoginRepository.GetUserClaimModel(user.Email);
+
+        var claims = new List<Claim>
+        {
+            new Claim("email", user.Email),
+            new Claim("role", "User"),
+            new Claim("userId", userData.Id.ToString()),
+            new Claim("name", userData.Name),
+            new Claim("userType", userData.UserType)
+        };
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var Sectoken = new JwtSecurityToken(_config["Jwt:Issuer"],
-            _config["Jwt:Issuer"],
-            null,
+            _config["Jwt:Audience"],
+            claims:claims,
             expires: DateTime.Now.AddMinutes(120),
             signingCredentials: credentials);
 

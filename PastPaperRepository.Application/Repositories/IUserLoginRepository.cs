@@ -9,4 +9,6 @@ public interface IUserLoginRepository
     Task<bool> Register(UsersLogin userLogin, CancellationToken token = default);
     
     Task<bool> SaveLoggedInUserDetails(LoggedInUserDetails userDetails, CancellationToken token = default);
+    
+    Task<UserClaimModel> GetUserClaimModel(string email, CancellationToken token = default);
 }

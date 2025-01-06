@@ -119,8 +119,8 @@ public class UserLoginRepository : IUserLoginRepository
                             userDetails.PhoneNumber,
                             userDetails.Grade,
                             userDetails.AcademicBackground,
-                            userDetails.Semester, 
-                            IsCompleted = 1 
+                            userDetails.Semester,
+                            IsCompleted = 1
                         },
                         transaction,
                         cancellationToken: token
@@ -139,5 +139,48 @@ public class UserLoginRepository : IUserLoginRepository
         }
     }
 
-}
+    public async Task<UserClaimModel> GetUserClaimModel(string email, CancellationToken token = default)
+    {
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = @"
+                    select 
+                        u.user_id as Id, 
+                        u.user_name as Name,
+                        case 
+                            when p.user_id is not null then 'paid'
+                            else 'unpaid'
+                        end as UserType
+                    from Users as u
+                    left join Payments as p on u.user_id = p.user_id
+                    where u.email = @Email";
 
+                    // Use an anonymous object to bind the email parameter
+                    var user = await connection.QuerySingleOrDefaultAsync<UserClaimModel>(
+                        new CommandDefinition(query, new { Email = email }, transaction: transaction, cancellationToken: token));
+
+                    // If no user is found, return null or throw an exception as per your logic
+                    if (user == null)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    transaction.Commit();
+                    return user;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
+    }
+
+}

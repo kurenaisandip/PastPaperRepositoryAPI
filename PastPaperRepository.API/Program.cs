@@ -88,6 +88,7 @@ builder.Services.AddCors(options =>
 
 // JWT configuration
 var jwtIssuer = config.GetSection("Jwt:Issuer").Get<string>();
+var jwtAudience = config.GetSection("Jwt:Audience").Get<string>();
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -103,7 +104,7 @@ builder.Services.AddAuthentication(x =>
         ValidateLifetime = true,
         ValidateAudience = true,
         ValidateIssuer = true,
-        ValidAudience = jwtIssuer,
+        ValidAudience = jwtAudience,
         ValidIssuer = jwtIssuer,
     };
 });
