@@ -96,7 +96,7 @@ public class LoginController : ControllerBase
         return Ok("User created successfully.");
     }
 
-    [HttpPost(ApiEndPoints.Login.SendUserData)]
+    [HttpPost(ApiEndPoints.Login.GetAllUserData)]
     public async Task<IActionResult> SendUserData([FromBody] SendUserDataRequest request, CancellationToken token)
     {
         var userData = request.MapToLoggedInUserDetails();
