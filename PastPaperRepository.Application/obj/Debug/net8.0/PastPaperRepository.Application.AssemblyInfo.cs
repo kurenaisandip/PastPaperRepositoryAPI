@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PastPaperRepository.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3dac82d007dc991944c8b534231eb4a53f53990c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ced063c8f30b8d36b11966b53e8617af80809fe6")]
 [assembly: System.Reflection.AssemblyProductAttribute("PastPaperRepository.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PastPaperRepository.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

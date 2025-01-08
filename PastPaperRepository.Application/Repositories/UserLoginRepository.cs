@@ -2,6 +2,7 @@
 using Dapper;
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Models;
+using PastPaperRepository.Application.Models.EducationalEntities;
 
 namespace PastPaperRepository.Application.Repositories;
 
@@ -69,14 +70,15 @@ public class UserLoginRepository : IUserLoginRepository
 
                     // Insert the new user
                     var insertQuery =
-                        "INSERT INTO Users (user_name, email, password) VALUES (@Name, @Email, @Password)";
+                        "INSERT INTO Users (user_name, email, password, role_id) VALUES (@Name, @Email, @Password, @Role)";
                     var rowsAffected = await connection.ExecuteAsync(new CommandDefinition(
                             insertQuery,
                             new
                             {
                                 Name = userLogin.Name,
                                 Email = userLogin.Email,
-                                Password = userLogin.Password
+                                Password = userLogin.Password,
+                               Role = 2 
                             },
                             transaction,
                             cancellationToken: token
@@ -166,6 +168,51 @@ public class UserLoginRepository : IUserLoginRepository
                         new CommandDefinition(query, new { Email = email }, transaction: transaction, cancellationToken: token));
 
                     // If no user is found, return null or throw an exception as per your logic
+                    if (user == null)
+                    {
+                        transaction.Rollback();
+                        return null;
+                    }
+
+                    transaction.Commit();
+                    return user;
+                }
+                catch (Exception e)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+        }
+    }
+    
+    //This method returns the user claim model when user submits the model data
+    public async Task<UserClaimModel> ReturnUserClaimModel(int userId, CancellationToken token = default)
+    {
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = @"
+                    select 
+                        u.user_id as Id, 
+                        l.IsUserDataComplete,
+                        u.user_name as Name,
+                        case 
+                            when p.user_id is not null then 'paid'
+                            else 'unpaid'
+                        end as UserType
+                    from Users as u
+                    left join Payments as p on u.user_id = p.user_id
+                    left join LoggedInUser as l on u.user_id = l.user_id
+                    where u.user_id = @UserId";
+                    
+                    var user = await connection.QuerySingleOrDefaultAsync<UserClaimModel>(
+                        new CommandDefinition(query, new { UserId = userId }, transaction: transaction, cancellationToken: token));
+                    
                     if (user == null)
                     {
                         transaction.Rollback();
