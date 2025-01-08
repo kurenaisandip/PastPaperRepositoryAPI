@@ -9,7 +9,7 @@ public class SendUserDataRequest
     public string? InstitutionName { get; init; }
 
     [Required(ErrorMessage = "Grade is required.")]
-    public string? Grade { get; init; }
+    public int? Grade { get; init; }
 
     [Required(ErrorMessage = "Semester is required.")]
     public string? Semester { get; init; }
