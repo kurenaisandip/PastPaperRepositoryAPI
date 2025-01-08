@@ -106,6 +106,8 @@ public class LoginController : ControllerBase
             return StatusCode(500, "An error occurred while saving the user data.");
         }
         
-        return Ok("User data saved successfully.");
+        var sendUserData = _userLoginRepository.ReturnUserClaimModel(userData.UserId, token);
+        
+        return Ok(sendUserData);
     }
 }
