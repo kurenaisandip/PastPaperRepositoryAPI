@@ -5,6 +5,6 @@ public class UserClaimModel
     public string Name { get; set; }
     public int Id { get; set; }
     public string UserType { get; set; }
-    
+
     public int IsUserDataComplete { get; set; }
 }

@@ -3,12 +3,11 @@ using PastPaperRepository.Application.Database;
 
 namespace PastPaperRepository.API.Health;
 
-public class DatabaseHealthCheck: IHealthCheck
+public class DatabaseHealthCheck : IHealthCheck
 {
+    public const string Name = "Database";
     private readonly IDbConnectionFactory _dbConnectionFactory;
     private readonly ILogger<DatabaseHealthCheck> _logger;
-    
-    public const string Name = "Database";
 
     public DatabaseHealthCheck(IDbConnectionFactory dbConnectionFactory, ILogger<DatabaseHealthCheck> logger)
     {
@@ -16,7 +15,8 @@ public class DatabaseHealthCheck: IHealthCheck
         _logger = logger;
     }
 
-    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = new ())
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+        CancellationToken cancellationToken = new())
     {
         try
         {
@@ -25,7 +25,6 @@ public class DatabaseHealthCheck: IHealthCheck
         }
         catch (Exception e)
         {
-            
             _logger.LogError(e, "Database is not available");
             return HealthCheckResult.Unhealthy();
         }

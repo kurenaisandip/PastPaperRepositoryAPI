@@ -25,14 +25,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddOpenTelemetry(options =>
 {
-    options.AddConsoleExporter();   
-    options.SetResourceBuilder(ResourceBuilder.CreateEmpty().AddService("PastPaperRepository.API").AddAttributes(new Dictionary<string, object>()
-    {
-        ["deployment.environment"] = builder.Environment.EnvironmentName,
-    }));
+    options.AddConsoleExporter();
+    options.SetResourceBuilder(ResourceBuilder.CreateEmpty().AddService("PastPaperRepository.API").AddAttributes(
+        new Dictionary<string, object>
+        {
+            ["deployment.environment"] = builder.Environment.EnvironmentName
+        }));
 
     options.IncludeScopes = true;
-    
+
     options.IncludeFormattedMessage = true;
 
     options.AddOtlpExporter(a =>
@@ -44,8 +45,6 @@ builder.Logging.AddOpenTelemetry(options =>
         }
     );
 });
-
-
 
 
 // Add services to the container
@@ -63,7 +62,7 @@ builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    string connection = builder.Configuration.GetConnectionString("Redis");
+    var connection = builder.Configuration.GetConnectionString("Redis");
     options.Configuration = connection;
 });
 builder.Services.AddHealthChecks()
@@ -74,10 +73,10 @@ builder.Services.AddSwaggerGen(x => x.OperationFilter<SwaggerDefaultValue>());
 var config = builder.Configuration;
 
 // Add CORS configuration
-string _defaultCorsPolicyName = "localhost";
+var _defaultCorsPolicyName = "localhost";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: _defaultCorsPolicyName,
+    options.AddPolicy(_defaultCorsPolicyName,
         policy =>
         {
             policy.WithOrigins("http://127.0.0.1:5500")
@@ -105,7 +104,7 @@ builder.Services.AddAuthentication(x =>
         ValidateAudience = true,
         ValidateIssuer = true,
         ValidAudience = jwtAudience,
-        ValidIssuer = jwtIssuer,
+        ValidIssuer = jwtIssuer
     };
 });
 
@@ -113,11 +112,15 @@ builder.Services.AddAuthorization(x =>
 {
     x.AddPolicy(AuthConstants.AdminUserPolicyName,
         policy => policy.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
+    x.AddPolicy(AuthConstants.UserPolicyName,
+        policy => policy.RequireClaim("role", "User"));
+
 
     x.AddPolicy(AuthConstants.TrustedMemberPolicyName,
         policy => policy.RequireAssertion(context =>
             context.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" }) ||
-            context.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" })
+            context.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" }) ||
+            context.User.HasClaim(m => m is { Type: AuthConstants.UserClaimName, Value: "true" })
         ));
 });
 
@@ -164,9 +167,9 @@ SentrySdk.Init(options =>
     // We enable it here for demonstration purposes when first trying Sentry.
     // You shouldn't do this in your applications unless you're troubleshooting issues with Sentry.
     options.Debug = true;
-    
+
     options.DiagnosticLevel = SentryLevel.Debug;
-    
+
     options.DiagnosticLogger = new FileDiagnosticLogger("D:/Applications/Sentry/sentry-diagnostic.log");
 
     // This option is recommended. It enables Sentry's "Release Health" feature.
@@ -230,8 +233,6 @@ SentrySdk.Init(options =>
 // SentrySdk.CaptureMessage("Something went wrong");
 
 
-
-
 var app = builder.Build();
 
 StripeConfiguration.ApiKey = app.Configuration["Stripe:SecretKey"];
@@ -243,10 +244,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(x =>
     {
         foreach (var description in app.DescribeApiVersions())
-        {
             x.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
                 description.GroupName);
-        }
     });
 }
 
@@ -269,5 +268,3 @@ var dbInitializer = app.Services.GetRequiredService<DbInitalizer>();
 await dbInitializer.InitializeAsync();
 
 app.Run();
-
-

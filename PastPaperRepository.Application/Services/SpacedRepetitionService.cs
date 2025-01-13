@@ -1,5 +1,4 @@
-﻿using PastPaperRepository.Application.Models;
-using PastPaperRepository.Application.Models.SpacedRepetition;
+﻿using PastPaperRepository.Application.Models.SpacedRepetition;
 using PastPaperRepository.Application.Repositories;
 
 namespace PastPaperRepository.Application.Services;
@@ -7,6 +6,7 @@ namespace PastPaperRepository.Application.Services;
 public class SpacedRepetitionService : ISpacedRepetitionService
 {
     private readonly ISpacedRepetitionRepository _spacedRepetitionRepository;
+
     public SpacedRepetitionService(ISpacedRepetitionRepository spacedRepetitionRepository)
     {
         _spacedRepetitionRepository = spacedRepetitionRepository;

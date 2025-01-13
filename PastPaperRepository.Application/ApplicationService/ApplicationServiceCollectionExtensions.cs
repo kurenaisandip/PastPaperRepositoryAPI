@@ -1,5 +1,4 @@
-﻿using System.Data;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Repositories;
@@ -12,12 +11,11 @@ namespace PastPaperRepository.Application.ApplicationService;
 
 public static class ApplicationServiceCollectionExtensions
 {
-
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddSingleton<IPastPaperRepository, Repositories.PastPaperRepository>();
         services.Decorate<IPastPaperRepository, CachedPastPaperRepository>();
-        services.AddSingleton<IPastPaperService, Services.PastPaperService>();
+        services.AddSingleton<IPastPaperService, PastPaperService>();
         services.AddSingleton<IEducationalEntitiesRepository, EducationalEntitiesRepository>();
         services.AddSingleton<IEducationalEntitiesService, EducationalEntitiesService>();
         services.AddValidatorsFromAssemblyContaining<IApplicationMarker>(ServiceLifetime.Singleton);
@@ -28,8 +26,8 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<ISpacedRepetitionRepository, SpacedRepetitionRepository>();
         services.AddSingleton<IPayementRepository, PaymentRepository>();
         services.AddSingleton<IPaymentService, PaymentService>();
-        
-        
+
+
         return services;
     }
 
@@ -39,5 +37,4 @@ public static class ApplicationServiceCollectionExtensions
         services.AddSingleton<DbInitalizer>();
         return services;
     }
-    
 }

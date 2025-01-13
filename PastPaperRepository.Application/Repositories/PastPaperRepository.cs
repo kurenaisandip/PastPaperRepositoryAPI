@@ -29,21 +29,37 @@ public class PastPaperRepository : IPastPaperRepository
                                                                              """, pastPapers,
                 cancellationToken: token));
 
-            var questionAnswers = pastPapers.Questions
-                .Where(q => q.Answers?.Any() == true)
-                .SelectMany(q => q.Answers.Select(a => new
+            if (pastPapers.Questions?.Any() == true)
+            {
+                foreach (var question in pastPapers.Questions)
                 {
-                    PastPaperId = pastPapers.PastPaperId,
-                    QuestionNumber = q.QuestionNumber,
-                    Question = q.Questtion,
-                    Answer = a.Content
-                }));    
-            
-             const string qaSQL = """
-                INSERT INTO QuestionAnswers (pastpaperid, question_number, question, answer)
-                VALUES (@PastPaperId, @QuestionNumber, @Question, @Answer)
-                """;
-             await connection.ExecuteAsync(new CommandDefinition(qaSQL, questionAnswers, cancellationToken: token));
+                    if (question.Answers?.Any() == true)
+                    {
+                        foreach (var answer in question.Answers)
+                        {
+                            await connection.ExecuteAsync(
+                                new CommandDefinition("""
+                                                      INSERT INTO QuestionAnswers (
+                                                          pastpaperId, question_number, question, answer
+                                                      )
+                                                      VALUES (
+                                                          @PastPaperId, @QuestionNumber, @Question, @Answer
+                                                      )
+                                                      """,
+                                    new
+                                    {
+                                        PastPaperId = pastPapers.PastPaperId,
+                                        QuestionNumber = question.QuestionNumber,
+                                        Question = question.Questtion,
+                                        Answer = answer.Content
+                                    },
+                                    transaction: transaction,
+                                    cancellationToken: token)
+                            );
+                        }
+                    }
+                }
+            }
              
 
             transaction.Commit();
@@ -155,10 +171,7 @@ public class PastPaperRepository : IPastPaperRepository
             {
                 try
                 {
-                    if (!await ExistsById(pastPaperId))
-                    {
-                        return false;
-                    }
+                    if (!await ExistsById(pastPaperId)) return false;
 
                     var result = await connection.ExecuteAsync(new CommandDefinition(@"
                     DELETE FROM PastPapers WHERE PastPaperId = @pastPaperId", new { pastPaperId }, transaction,

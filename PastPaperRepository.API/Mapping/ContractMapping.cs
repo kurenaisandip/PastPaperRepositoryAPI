@@ -15,7 +15,7 @@ public static class ContractMapping
 {
     public static PastPapers MapToPastPapers(this CreatePastPaperRequest request)
     {
-        return new PastPapers()
+        return new PastPapers
         {
             PastPaperId = Guid.NewGuid().ToString(),
             Title = request.Title,
@@ -28,12 +28,13 @@ public static class ContractMapping
             FilePath = request.FilePath,
             Questions = request.QuestionRequests?.Select(q => new Question
             {
-                Content = q.Content,
+                QuestionNumber = q.QuestionId,
+                Questtion = q.Question,
                 Answers = q.Answers.Select(a => new Answer
                 {
                     Content = a.Content
                 }).ToList()
-            }).ToList() 
+            }).ToList()
         };
     }
 
@@ -57,7 +58,7 @@ public static class ContractMapping
     public static PastPapersResponse MapToPastPapersResponse(this IEnumerable<PastPapers> pastPapers, int page,
         int pageSize, int totalCount)
     {
-        return new PastPapersResponse()
+        return new PastPapersResponse
         {
             PastPapers = pastPapers.Select(p => p.MapToResponsePastPaper()),
             Page = page,
@@ -65,10 +66,10 @@ public static class ContractMapping
             TotalCount = totalCount
         };
     }
-    
+
     public static PastPapers MapToPastPapers(this UpdatePastPaperRequest request, string id)
     {
-        return new PastPapers()
+        return new PastPapers
         {
             PastPaperId = id,
             Title = request.Title,
@@ -84,7 +85,7 @@ public static class ContractMapping
 
     public static UpdatePastPaperResponse MapToUpdatedPastPaper(this PastPapers response)
     {
-        return new UpdatePastPaperResponse()
+        return new UpdatePastPaperResponse
         {
             PastPaperId = response.PastPaperId,
             Title = response.Title,
@@ -100,7 +101,7 @@ public static class ContractMapping
 
     public static UsersLogin MapToUsersLogin(this LogInUser request)
     {
-        return new UsersLogin()
+        return new UsersLogin
         {
             Email = request.Email,
             Password = request.Password
@@ -109,7 +110,7 @@ public static class ContractMapping
 
     public static UsersLogin MapToUsersRegister(this RegisterUser request)
     {
-        return new UsersLogin()
+        return new UsersLogin
         {
             Name = request.Name,
             Email = request.Email,
@@ -119,7 +120,7 @@ public static class ContractMapping
 
     public static GetAllPastPapersOptions MapToGetAllPastPapersOptions(this GetAllPastPapersRequest request)
     {
-        return new GetAllPastPapersOptions()
+        return new GetAllPastPapersOptions
         {
             Title = request.Title,
             Year = request.Year,
@@ -127,7 +128,7 @@ public static class ContractMapping
             SortOrder = request.SortBy is null ? SortOrder.UnSorted :
                 request.SortBy.StartsWith('-') ? SortOrder.Descending : SortOrder.Ascending,
             Page = request.Page,
-            PageSize = request.PageSize,
+            PageSize = request.PageSize
         };
     }
 
@@ -161,7 +162,7 @@ public static class ContractMapping
             PastPaperId = request.PastPaperId,
             AddedDate = request.AddedDate,
             NextReviewDate = request.NextReviewDate,
-            Status = request.Status,
+            Status = request.Status
         };
     }
 
@@ -172,7 +173,7 @@ public static class ContractMapping
             UserId = request.UserId,
             ProductName = request.ProductName,
             Price = request.Price,
-            ValidUntil = request.ValidUntil,
+            ValidUntil = request.ValidUntil
         };
     }
 
@@ -181,7 +182,7 @@ public static class ContractMapping
         return new School
         {
             Name = request.Name,
-            Address = request.Address,
+            Address = request.Address
         };
     }
 
@@ -202,7 +203,7 @@ public static class ContractMapping
             CategoryDescription = request.Description
         };
     }
-    
+
     public static LoggedInUserDetails MapToLoggedInUserDetails(this SendUserDataRequest user)
     {
         return new LoggedInUserDetails

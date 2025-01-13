@@ -6,23 +6,24 @@ namespace PastPaperRepository.API;
 public class MailgunEmailSender
 {
     private readonly string _apiKey;
+    private readonly string _baseUrl = "https://api.mailgun.net/v3";
     private readonly string _domain;
-    private string _baseUrl = "https://api.mailgun.net/v3";
-    
+
     public MailgunEmailSender(string apiKey, string domain)
     {
         _apiKey = apiKey;
         _domain = domain;
     }
 
-    public async Task<bool> SendEmailAsync(string to, string subject, string body, string from = null, bool isHtml = false)
+    public async Task<bool> SendEmailAsync(string to, string subject, string body, string from = null,
+        bool isHtml = false)
     {
-        
-        var options = new RestClientOptions(_baseUrl) {
+        var options = new RestClientOptions(_baseUrl)
+        {
             Authenticator = new HttpBasicAuthenticator("api", _apiKey)
         };
-        RestClient client = new RestClient(options);
-       
+        var client = new RestClient(options);
+
 
         var request = new RestRequest($"{_domain}/messages", Method.Post);
         request.AddParameter("to", to);
@@ -30,13 +31,9 @@ public class MailgunEmailSender
         request.AddParameter("subject", subject);
 
         if (isHtml)
-        {
             request.AddParameter("html", body);
-        }
         else
-        {
             request.AddParameter("text", body);
-        }
 
         var response = await client.ExecuteAsync(request);
 

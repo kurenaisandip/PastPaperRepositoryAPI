@@ -4,7 +4,7 @@ using PastPaperRepository.Application.Models.Payment;
 
 namespace PastPaperRepository.Application.Repositories.Payments;
 
-public class PaymentRepository: IPayementRepository
+public class PaymentRepository : IPayementRepository
 {
     private readonly IDbConnectionFactory _connectionFactory;
 
@@ -26,15 +26,15 @@ public class PaymentRepository: IPayementRepository
                         var result = await connection.ExecuteAsync(new CommandDefinition("""
                                 INSERT INTO Payments (amount, user_id, valid_until, product_name)
                                 VALUES (@Price, @UserId, @ValidUntil, @ProductName)
-                            """, model, transaction: transaction, cancellationToken: cancellationToken));
+                            """, model, transaction, cancellationToken: cancellationToken));
 
                         transaction.Commit();
                         return result > 0;
                     }
                     catch
                     {
-                        transaction.Rollback(); 
-                        throw; 
+                        transaction.Rollback();
+                        throw;
                     }
                 }
             }

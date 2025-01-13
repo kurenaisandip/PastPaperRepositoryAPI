@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-
-namespace PastPaperRepository.Contracts.Requests.Payments;
+﻿namespace PastPaperRepository.Contracts.Requests.Payments;
 
 public class CreatePaymentRequest
 {

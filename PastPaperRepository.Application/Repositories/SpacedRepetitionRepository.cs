@@ -1,11 +1,10 @@
-﻿using System.Transactions;
-using Dapper;
+﻿using Dapper;
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Models.SpacedRepetition;
 
 namespace PastPaperRepository.Application.Repositories;
 
-public class SpacedRepetitionRepository: ISpacedRepetitionRepository
+public class SpacedRepetitionRepository : ISpacedRepetitionRepository
 {
     private readonly IDbConnectionFactory _connectionFactory;
 
@@ -27,15 +26,15 @@ public class SpacedRepetitionRepository: ISpacedRepetitionRepository
                         var result = await connection.ExecuteAsync(new CommandDefinition("""
                                 INSERT INTO LearningDeck (pastpaperid, status, datetime, user_id, nextReviewDateTime)
                                 VALUES (@PastPaperId, @Status, @AddedDate, @UserId, @NextReviewDate)
-                            """, request, transaction: transaction, cancellationToken: token));
+                            """, request, transaction, cancellationToken: token));
 
-                         transaction.Commit();
+                        transaction.Commit();
                         return result > 0;
                     }
                     catch
                     {
-                         transaction.Rollback(); 
-                        throw; 
+                        transaction.Rollback();
+                        throw;
                     }
                 }
             }
@@ -43,7 +42,8 @@ public class SpacedRepetitionRepository: ISpacedRepetitionRepository
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw new Exception("Failed to add to LearningDeck", e); // Wrap with context but preserve original exception
+            throw new Exception("Failed to add to LearningDeck",
+                e); // Wrap with context but preserve original exception
         }
     }
 
@@ -65,7 +65,9 @@ public class SpacedRepetitionRepository: ISpacedRepetitionRepository
                 WHERE ld.UserId = @UserId
                 GROUP BY p.PastPaperId, p.Title";
 
-                var result = await connection.QueryAsync<DeckViewModel>( new CommandDefinition(sql, new { UserId = userId }, cancellationToken: token));
+                var result =
+                    await connection.QueryAsync<DeckViewModel>(new CommandDefinition(sql, new { UserId = userId },
+                        cancellationToken: token));
                 return result.ToList();
             }
         }
@@ -76,7 +78,8 @@ public class SpacedRepetitionRepository: ISpacedRepetitionRepository
         }
     }
 
-    public async Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(string userId, long pastPaperId, CancellationToken token = default)
+    public async Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(string userId, long pastPaperId,
+        CancellationToken token = default)
     {
         try
         {
@@ -96,7 +99,8 @@ public class SpacedRepetitionRepository: ISpacedRepetitionRepository
                 ORDER BY ld.Score, ld.NextReviewDate";
 
                 var result = await connection.QueryAsync<QuestionAnswers>(
-                    new CommandDefinition(sql, new { UserId = userId, PastPaperId = pastPaperId }, cancellationToken: token)
+                    new CommandDefinition(sql, new { UserId = userId, PastPaperId = pastPaperId },
+                        cancellationToken: token)
                 );
 
                 return result.ToList();

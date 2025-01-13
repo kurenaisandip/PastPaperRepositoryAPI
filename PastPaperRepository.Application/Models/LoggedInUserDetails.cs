@@ -8,5 +8,4 @@ public class LoggedInUserDetails
     public string? Semester { get; set; }
     public string PhoneNumber { get; set; }
     public string? AcademicBackground { get; set; }
-    
 }

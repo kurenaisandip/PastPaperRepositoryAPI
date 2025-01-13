@@ -12,6 +12,6 @@ public class LearningDeck
 
     public long? QuestionNumber { get; init; }
     public long? Score { get; init; }
-    
+
     #endregion
 }

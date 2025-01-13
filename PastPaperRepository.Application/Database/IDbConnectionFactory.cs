@@ -4,8 +4,5 @@ namespace PastPaperRepository.Application.Database;
 
 public interface IDbConnectionFactory
 {
-     Task<IDbConnection> CreateConnectionAsync(CancellationToken token = default);
-    
+    Task<IDbConnection> CreateConnectionAsync(CancellationToken token = default);
 }
-
-

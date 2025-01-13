@@ -5,10 +5,10 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace PastPaperRepository.API.Swagger;
 
-public class ConfigureSwaggerOptions: IConfigureOptions<SwaggerGenOptions>
+public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
 {
-    private readonly IApiVersionDescriptionProvider _provider;
     private readonly IHostEnvironment _environment;
+    private readonly IApiVersionDescriptionProvider _provider;
 
     public ConfigureSwaggerOptions(IApiVersionDescriptionProvider provider, IHostEnvironment environment)
     {
@@ -19,16 +19,14 @@ public class ConfigureSwaggerOptions: IConfigureOptions<SwaggerGenOptions>
     public void Configure(SwaggerGenOptions options)
     {
         foreach (var description in _provider.ApiVersionDescriptions)
-        {
             options.SwaggerDoc(
                 description.GroupName,
                 new OpenApiInfo
                 {
                     Title = _environment.ApplicationName,
-                    Version = description.ApiVersion.ToString(),
+                    Version = description.ApiVersion.ToString()
                 });
-        }
-        
+
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             In = ParameterLocation.Header,
@@ -38,7 +36,7 @@ public class ConfigureSwaggerOptions: IConfigureOptions<SwaggerGenOptions>
             BearerFormat = "JWT",
             Scheme = "Bearer"
         });
-        
+
         options.AddSecurityRequirement(new OpenApiSecurityRequirement
         {
             {

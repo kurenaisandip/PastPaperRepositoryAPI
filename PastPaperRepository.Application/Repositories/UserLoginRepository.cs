@@ -1,8 +1,6 @@
-﻿using System.Transactions;
-using Dapper;
+﻿using Dapper;
 using PastPaperRepository.Application.Database;
 using PastPaperRepository.Application.Models;
-using PastPaperRepository.Application.Models.EducationalEntities;
 
 namespace PastPaperRepository.Application.Repositories;
 
@@ -27,10 +25,7 @@ public class UserLoginRepository : IUserLoginRepository
                     var result = await connection.ExecuteScalarAsync<int>(new CommandDefinition(query,
                         new { userLogin.Email, userLogin.Password }, transaction, cancellationToken: token));
 
-                    if (result == 0)
-                    {
-                        return false;
-                    }
+                    if (result == 0) return false;
 
                     transaction.Commit();
                     return result > 0;
@@ -57,16 +52,13 @@ public class UserLoginRepository : IUserLoginRepository
                     var checkQuery = "SELECT COUNT(1) FROM Users WHERE Email = @Email";
                     var userExists = await connection.ExecuteScalarAsync<int>(new CommandDefinition(
                             checkQuery,
-                            new { Email = userLogin.Email },
+                            new { userLogin.Email },
                             transaction,
                             cancellationToken: token
                         )
                     );
 
-                    if (userExists > 0)
-                    {
-                        return false; // User already exists
-                    }
+                    if (userExists > 0) return false; // User already exists
 
                     // Insert the new user
                     var insertQuery =
@@ -75,10 +67,10 @@ public class UserLoginRepository : IUserLoginRepository
                             insertQuery,
                             new
                             {
-                                Name = userLogin.Name,
-                                Email = userLogin.Email,
-                                Password = userLogin.Password,
-                               Role = 2 
+                                userLogin.Name,
+                                userLogin.Email,
+                                userLogin.Password,
+                                Role = 2
                             },
                             transaction,
                             cancellationToken: token
@@ -165,7 +157,7 @@ public class UserLoginRepository : IUserLoginRepository
 
                     // Use an anonymous object to bind the email parameter
                     var user = await connection.QuerySingleOrDefaultAsync<UserClaimModel>(
-                        new CommandDefinition(query, new { Email = email }, transaction: transaction, cancellationToken: token));
+                        new CommandDefinition(query, new { Email = email }, transaction, cancellationToken: token));
 
                     // If no user is found, return null or throw an exception as per your logic
                     if (user == null)
@@ -186,7 +178,7 @@ public class UserLoginRepository : IUserLoginRepository
             }
         }
     }
-    
+
     //This method returns the user claim model when user submits the model data
     public async Task<UserClaimModel> ReturnUserClaimModel(int userId, CancellationToken token = default)
     {
@@ -209,10 +201,10 @@ public class UserLoginRepository : IUserLoginRepository
                     left join Payments as p on u.user_id = p.user_id
                     left join LoggedInUser as l on u.user_id = l.user_id
                     where u.user_id = @UserId";
-                    
+
                     var user = await connection.QuerySingleOrDefaultAsync<UserClaimModel>(
-                        new CommandDefinition(query, new { UserId = userId }, transaction: transaction, cancellationToken: token));
-                    
+                        new CommandDefinition(query, new { UserId = userId }, transaction, cancellationToken: token));
+
                     if (user == null)
                     {
                         transaction.Rollback();
@@ -231,5 +223,4 @@ public class UserLoginRepository : IUserLoginRepository
             }
         }
     }
-
 }

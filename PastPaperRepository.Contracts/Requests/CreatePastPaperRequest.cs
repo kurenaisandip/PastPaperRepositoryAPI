@@ -10,14 +10,14 @@ public class CreatePastPaperRequest
     public string DifficultyLevel { get; init; }
     public string ExamBoard { get; init; }
     public string FilePath { get; init; }
-    
+
     public List<CreateQuestionRequest> QuestionRequests { get; init; }
 }
 
-
 public class CreateQuestionRequest
 {
-    public string Content { get; init; }
+    public int QuestionId { get; init; }
+    public string Question { get; init; }
     public List<CreateAnswerRequest> Answers { get; init; }
 }
 

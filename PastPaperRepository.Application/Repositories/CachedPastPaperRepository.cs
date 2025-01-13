@@ -1,8 +1,5 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using PastPaperRepository.Application.Models;
 
 namespace PastPaperRepository.Application.Repositories;
@@ -20,29 +17,26 @@ public class CachedPastPaperRepository : IPastPaperRepository
 
     public Task<bool> CreatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default)
     {
-        throw new NotImplementedException();
+        return _decorated.CreatePastPaperAsync(pastPapers, token);
     }
 
     public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, CancellationToken token = default)
     {
-        string cacheKey = $"PastPaper_{pastPaperId}";
-      
-        string? cachedPastPaper = await _distributedCache.GetStringAsync(cacheKey, token);
+        var cacheKey = $"PastPaper_{pastPaperId}";
+
+        var cachedPastPaper = await _distributedCache.GetStringAsync(cacheKey, token);
 
         PastPapers? pastPaper;
         if (string.IsNullOrEmpty(cachedPastPaper))
         {
-             pastPaper = await _decorated.GetPastPaperByIdAsync(pastPaperId, token);
+            pastPaper = await _decorated.GetPastPaperByIdAsync(pastPaperId, token);
 
-            if (pastPaper is null)
-            {
-                return pastPaper;
-            }
+            if (pastPaper is null) return pastPaper;
 
             await _distributedCache.SetStringAsync(cacheKey, JsonSerializer.Serialize(pastPaper), token);
             return pastPaper;
         }
-        
+
         pastPaper = JsonSerializer.Deserialize<PastPapers>(cachedPastPaper);
 
         return pastPaper;
@@ -53,7 +47,8 @@ public class CachedPastPaperRepository : IPastPaperRepository
         return _decorated.GetPastPaperBySlugAsync(slug, token);
     }
 
-    public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(GetAllPastPapersOptions options, CancellationToken token = default)
+    public Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(GetAllPastPapersOptions options,
+        CancellationToken token = default)
     {
         return _decorated.GetAllPastPapersAsync(options, token);
     }
@@ -75,6 +70,6 @@ public class CachedPastPaperRepository : IPastPaperRepository
 
     public Task<int> GetCountAsync(string? title, int? year, CancellationToken token = default)
     {
-       return _decorated.GetCountAsync(title, year, token);
+        return _decorated.GetCountAsync(title, year, token);
     }
 }

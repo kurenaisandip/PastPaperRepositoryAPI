@@ -7,6 +7,7 @@ namespace PastPaperRepository.Application.Validators;
 public class PastPaperValidators : AbstractValidator<PastPapers>
 {
     private readonly IPastPaperRepository _pastPaperRepository;
+
     public PastPaperValidators(IPastPaperRepository pastPaperRepository)
     {
         _pastPaperRepository = pastPaperRepository;
@@ -19,6 +20,5 @@ public class PastPaperValidators : AbstractValidator<PastPapers>
         RuleFor(x => x.DifficultyLevel).NotEmpty();
         RuleFor(x => x.ExamType).NotEmpty();
         RuleFor(x => x.FilePath).NotEmpty();
-
     }
 }

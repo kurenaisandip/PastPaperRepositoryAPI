@@ -8,7 +8,7 @@ using Stripe.Checkout;
 namespace PastPaperRepository.API.Controller;
 
 [ApiController]
-public class PaymentController: ControllerBase
+public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
 
@@ -24,19 +24,19 @@ public class PaymentController: ControllerBase
         var result = await _paymentService.CreatePaymentAsync(model, token);
 
         return Ok(result);
-    }  
-    
+    }
+
     [AllowAnonymous]
     [HttpPost(ApiEndPoints.Payments.CheckoutSession)]
     public async Task<IActionResult> CheckoutSession([FromBody] CreatePaymentRequest request, CancellationToken token)
     {
         // Map the request to the payment model
         var model = request.MapToCreatePaymentModel();
-        var unitAmount = (long)(model.Price * 100);
+        var unitAmount = model.Price * 100;
 
         // Define success and cancel URLs
-        var successUrl = $"http://127.0.0.1:5500/success.html";
-        var cancelUrl = $"http://127.0.0.1:5500/cancel.html";
+        var successUrl = "http://127.0.0.1:5500/success.html";
+        var cancelUrl = "http://127.0.0.1:5500/cancel.html";
 
         // Create session options
         var options = new SessionCreateOptions
@@ -44,10 +44,10 @@ public class PaymentController: ControllerBase
             PaymentMethodTypes = new List<string> { "card" },
             Mode = "payment",
             SuccessUrl = successUrl, // Correctly placed success URL
-            CancelUrl = cancelUrl,   // Correctly placed cancel URL
+            CancelUrl = cancelUrl, // Correctly placed cancel URL
             LineItems = new List<SessionLineItemOptions>
             {
-                new SessionLineItemOptions
+                new()
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
@@ -55,18 +55,18 @@ public class PaymentController: ControllerBase
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
                             Name = $"Thank You for buying our {model.ProductName}",
-                            Description = $"Your subscription will work until {model.ValidUntil:yyyy-MM-dd}",
+                            Description = $"Your subscription will work until {model.ValidUntil:yyyy-MM-dd}"
                         },
-                        UnitAmount = unitAmount,
+                        UnitAmount = unitAmount
                     },
-                    Quantity = 1,
+                    Quantity = 1
                 }
-            },
+            }
         };
 
         // Use Stripe's session service to create the session
         var service = new SessionService();
-        Session session = await service.CreateAsync(options, cancellationToken: token);
+        var session = await service.CreateAsync(options, cancellationToken: token);
 
         return new JsonResult(new { sessionId = session.Id });
         // Set the session URL in the response headers
@@ -75,5 +75,4 @@ public class PaymentController: ControllerBase
         // // Return a 303 See Other response
         // return new StatusCodeResult(303);
     }
-
 }

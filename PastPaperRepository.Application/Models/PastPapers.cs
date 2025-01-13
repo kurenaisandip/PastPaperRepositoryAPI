@@ -15,16 +15,16 @@ public partial class PastPapers
     public string DifficultyLevel { get; set; }
     public string ExamBoard { get; set; }
     public string FilePath { get; set; }
-    
+
     public List<Question>? Questions { get; set; }
-    
+
     private string generateSlug()
     {
         // var slugTitle = Regex.Replace(Title, "[^a-zA-Z0-9]", String.Empty).ToLower().Replace("", "-");
-        var slugTitle = SlugRegex().Replace(Title, String.Empty)  // Remove non-alphanumeric characters except spaces
-            .Trim()  // Remove leading and trailing whitespace
-            .Replace(" ", "-")  // Replace spaces with dashes
-            .ToLower();  // Convert to lowercase
+        var slugTitle = SlugRegex().Replace(Title, string.Empty) // Remove non-alphanumeric characters except spaces
+            .Trim() // Remove leading and trailing whitespace
+            .Replace(" ", "-") // Replace spaces with dashes
+            .ToLower(); // Convert to lowercase
         return $"{slugTitle}-{Year}";
     }
 
@@ -35,7 +35,8 @@ public partial class PastPapers
 public class Question
 {
     public string PastPaperId { get; set; } // Foreign key to PastPapers
-    public string Content { get; set; }
+    public int QuestionNumber { get; set; }
+    public string Questtion { get; set; }
     public List<Answer> Answers { get; set; } // Navigation property for related answers
 }
 

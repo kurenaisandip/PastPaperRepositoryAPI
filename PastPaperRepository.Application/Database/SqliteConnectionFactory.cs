@@ -3,7 +3,7 @@ using System.Data.SQLite;
 
 namespace PastPaperRepository.Application.Database;
 
-public class SqliteConnectionFactory: IDbConnectionFactory
+public class SqliteConnectionFactory : IDbConnectionFactory
 {
     private readonly string _connectionString;
 

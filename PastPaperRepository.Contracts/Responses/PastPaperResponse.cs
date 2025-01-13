@@ -2,10 +2,9 @@
 
 public class PastPaperResponse
 {
-    
     public string PastPaperId { get; init; }
     public string Title { get; init; }
-    
+
     public string Slug { get; init; }
     public int SubjectId { get; init; }
     public int CategoryId { get; init; }
