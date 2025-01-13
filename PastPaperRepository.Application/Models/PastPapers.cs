@@ -16,6 +16,8 @@ public partial class PastPapers
     public string ExamBoard { get; set; }
     public string FilePath { get; set; }
     
+    public List<Question>? Questions { get; set; }
+    
     private string generateSlug()
     {
         // var slugTitle = Regex.Replace(Title, "[^a-zA-Z0-9]", String.Empty).ToLower().Replace("", "-");
@@ -28,4 +30,17 @@ public partial class PastPapers
 
     [GeneratedRegex("[^a-zA-Z0-9 ]", RegexOptions.NonBacktracking, 5)]
     private static partial Regex SlugRegex();
+}
+
+public class Question
+{
+    public string PastPaperId { get; set; } // Foreign key to PastPapers
+    public string Content { get; set; }
+    public List<Answer> Answers { get; set; } // Navigation property for related answers
+}
+
+public class Answer
+{
+    public int QuestionId { get; set; } // Foreign key to Questions
+    public string Content { get; set; }
 }

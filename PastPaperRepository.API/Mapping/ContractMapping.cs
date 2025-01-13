@@ -25,7 +25,15 @@ public static class ContractMapping
             ExamType = request.ExamType,
             DifficultyLevel = request.DifficultyLevel,
             ExamBoard = request.ExamBoard,
-            FilePath = request.FilePath
+            FilePath = request.FilePath,
+            Questions = request.QuestionRequests?.Select(q => new Question
+            {
+                Content = q.Content,
+                Answers = q.Answers.Select(a => new Answer
+                {
+                    Content = a.Content
+                }).ToList()
+            }).ToList() 
         };
     }
 
