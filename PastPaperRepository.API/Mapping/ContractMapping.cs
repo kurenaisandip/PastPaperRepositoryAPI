@@ -199,9 +199,9 @@ public static class ContractMapping
     {
         return new LoggedInUserDetails
         {
-            UserId = user.UserId,
+            UserId = Convert.ToInt32(user.UserId),
             InstitutionName = user.InstitutionName,
-            Grade = user.Grade,
+            Grade = Convert.ToInt32(user.Grade),
             Semester = user.Semester,
             PhoneNumber = user.PhoneNumber,
             AcademicBackground = user.AcademicBackground
