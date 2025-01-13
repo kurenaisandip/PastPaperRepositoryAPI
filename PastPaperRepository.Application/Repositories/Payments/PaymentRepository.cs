@@ -42,7 +42,7 @@ public class PaymentRepository: IPayementRepository
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw new Exception("Failed to add to LearningDeck", e); // Wrap with context but preserve original exception
+            throw new Exception("Failed complete the payment", e); // Wrap with context but preserve original exception
         }
     }
 }
