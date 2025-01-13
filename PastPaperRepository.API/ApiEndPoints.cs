@@ -14,6 +14,7 @@ public static class ApiEndPoints
         public const string GetAll = $"{Base}/all";
         public const string Update = $"{Base}/{{id:guid}}";
         public const string Delete = $"{Base}/{{id:guid}}";
+        public const string DynamicModal = $"{Base}/dynamic-modal{{id:int}}";
     }
 
     public static class Login
