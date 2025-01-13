@@ -4,12 +4,12 @@ namespace PastPaperRepository.Contracts.Requests;
 
 public class SendUserDataRequest
 {
-    public int UserId { get; init; }
+    public string UserId { get; init; }
     [Required(ErrorMessage = "InstitutionName is required.")]
     public string? InstitutionName { get; init; }
 
     [Required(ErrorMessage = "Grade is required.")]
-    public int? Grade { get; init; }
+    public string? Grade { get; init; }
 
     [Required(ErrorMessage = "Semester is required.")]
     public string? Semester { get; init; }
