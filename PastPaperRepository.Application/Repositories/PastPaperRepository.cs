@@ -29,6 +29,23 @@ public class PastPaperRepository : IPastPaperRepository
                                                                              """, pastPapers,
                 cancellationToken: token));
 
+            var questionAnswers = pastPapers.Questions
+                .Where(q => q.Answers?.Any() == true)
+                .SelectMany(q => q.Answers.Select(a => new
+                {
+                    PastPaperId = pastPapers.PastPaperId,
+                    QuestionNumber = q.QuestionNumber,
+                    Question = q.Questtion,
+                    Answer = a.Content
+                }));    
+            
+             const string qaSQL = """
+                INSERT INTO QuestionAnswers (pastpaperid, question_number, question, answer)
+                VALUES (@PastPaperId, @QuestionNumber, @Question, @Answer)
+                """;
+             await connection.ExecuteAsync(new CommandDefinition(qaSQL, questionAnswers, cancellationToken: token));
+             
+
             transaction.Commit();
             return result > 0;
         }
