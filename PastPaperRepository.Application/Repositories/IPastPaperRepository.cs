@@ -16,4 +16,6 @@ public interface IPastPaperRepository
     Task<bool> ExistsById(string pastPaperId, CancellationToken token = default);
 
     Task<int> GetCountAsync(string? title, int? year, CancellationToken token = default);
+    
+    Task<IEnumerable<DynamicPastPaperModal>> GetDynamicPastPapersAsync(int id, CancellationToken token = default);
 }

@@ -210,4 +210,35 @@ public class PastPaperRepository : IPastPaperRepository
                 new { Year = year, Title = title }, cancellationToken: token));
         }
     }
+
+    public async Task<IEnumerable<DynamicPastPaperModal>> GetDynamicPastPapersAsync(int id, CancellationToken token = default)
+    {
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+        {
+            using (var transaction = connection.BeginTransaction())
+            {
+                try
+                {
+                    var query = @"
+                SELECT PastPaperId, ExamBoard, Title, Year
+                FROM PastPapers
+                JOIN Semester ON PastPapers.semester_id = Semester.semester_id
+                JOIN LoggedInUser AS l ON Semester.semester_id = l.optional_subject
+                WHERE l.user_id = @id;
+            ";
+                    
+                    var result = await connection.QueryAsync<DynamicPastPaperModal>(new CommandDefinition(query, new { id }, transaction, cancellationToken: token));
+
+                transaction.Commit();
+                return result;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    transaction.Rollback();
+                    throw;
+                }
+            }
+        }
+    }
 }

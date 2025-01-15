@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Diagnostics.Tracing.Parsers.MicrosoftWindowsTCPIP;
 using PastPaperRepository.API.Auth;
 using PastPaperRepository.API.Mapping;
 using PastPaperRepository.Application.Services;
@@ -106,5 +107,13 @@ public class PastPaperController : ControllerBase
         if (!deletedPastPaper) return NotFound();
 
         return Ok();
+    }
+
+    [Authorize(AuthConstants.UserPolicyName)]
+    [HttpGet(ApiEndPoints.PastPaper.DynamicModal)]
+    public async Task<IActionResult> DynamicModal([FromRoute] int id, CancellationToken token)
+    {
+        var result = _pastPaperService.GetDynamicPastPapersAsync(id, token);
+        return Ok(result);
     }
 }

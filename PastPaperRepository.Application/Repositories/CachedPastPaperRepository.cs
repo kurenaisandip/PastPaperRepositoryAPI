@@ -72,4 +72,9 @@ public class CachedPastPaperRepository : IPastPaperRepository
     {
         return _decorated.GetCountAsync(title, year, token);
     }
+
+    public Task<IEnumerable<DynamicPastPaperModal>> GetDynamicPastPapersAsync(int id, CancellationToken token = default)
+    {
+        return _decorated.GetDynamicPastPapersAsync(id, token);
+    }
 }
