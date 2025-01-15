@@ -63,4 +63,9 @@ public class PastPaperService : IPastPaperService
     {
         return _pastPaperRepository.GetCountAsync(title, year, token);
     }
+
+    public Task<IEnumerable<DynamicPastPaperModal>> GetDynamicPastPapersAsync(int id, CancellationToken token = default)
+    {
+        return _pastPaperRepository.GetDynamicPastPapersAsync(id, token);
+    }
 }
