@@ -120,7 +120,7 @@ builder.Services.AddAuthorization(x =>
         policy => policy.RequireAssertion(context =>
             context.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" }) ||
             context.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" }) ||
-            context.User.HasClaim(m => m is { Type: AuthConstants.UserClaimName, Value: "true" })
+            context.User.HasClaim(m => m is { Type: "role", Value: "User" }) 
         ));
 });
 
