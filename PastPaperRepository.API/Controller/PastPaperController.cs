@@ -21,7 +21,7 @@ public class PastPaperController : ControllerBase
         _pastPaperService = pastPaperService;
     }
 
-    // [Authorize(AuthConstants.UserPolicyName)]
+    // [Authorize(AuthConstants.Role)]
     [AllowAnonymous]
     [HttpPost(ApiEndPoints.PastPaper.Create)]
     public async Task<IActionResult> CreatePastPapers([FromBody] CreatePastPaperRequest request,
@@ -109,11 +109,12 @@ public class PastPaperController : ControllerBase
         return Ok();
     }
 
-    [Authorize(AuthConstants.UserPolicyName)]
+    [AllowAnonymous]
+    // [Authorize(AuthConstants.UserPolicyName)]
     [HttpGet(ApiEndPoints.PastPaper.DynamicModal)]
     public async Task<IActionResult> DynamicModal([FromRoute] int id, CancellationToken token)
     {
-        var result = _pastPaperService.GetDynamicPastPapersAsync(id, token);
+        var result = await _pastPaperService.GetDynamicPastPapersAsync(id, token);
         return Ok(result);
     }
 }
