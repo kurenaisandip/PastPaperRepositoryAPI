@@ -60,7 +60,7 @@ public class PastPaperRepository : IPastPaperRepository
                     }
                 }
             }
-             
+
 
             transaction.Commit();
             return result > 0;
@@ -211,7 +211,8 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public async Task<IEnumerable<DynamicPastPaperModal>> GetDynamicPastPapersAsync(int id, CancellationToken token = default)
+    public async Task<IEnumerable<DynamicPastPaperModal>> GetDynamicPastPapersAsync(int id,
+        CancellationToken token = default)
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
@@ -220,17 +221,19 @@ public class PastPaperRepository : IPastPaperRepository
                 try
                 {
                     var query = @"
-                SELECT PastPaperId, ExamBoard, Title, Year
-                FROM PastPapers
-                JOIN Semester ON PastPapers.semester_id = Semester.semester_id
-                JOIN LoggedInUser AS l ON Semester.semester_id = l.optional_subject
-                WHERE l.user_id = @id;
+              SELECT p.PastPaperId, p.Title, p.Year, s.name as Subject
+FROM PastPapers as p
+         JOIN Semester ON p.semester_id = Semester.semester_id
+         JOIN LoggedInUser AS l ON Semester.semester_id = l.optional_subject
+JOIN Subject as s on p.SubjectId = s.subject_id
+WHERE l.user_id = @id;
             ";
-                    
-                    var result = await connection.QueryAsync<DynamicPastPaperModal>(new CommandDefinition(query, new { id }, transaction, cancellationToken: token));
 
-                transaction.Commit();
-                return result;
+                    var result = await connection.QueryAsync<DynamicPastPaperModal>(
+                        new CommandDefinition(query, new { id }, transaction, cancellationToken: token));
+
+                    transaction.Commit();
+                    return result;
                 }
                 catch (Exception e)
                 {
