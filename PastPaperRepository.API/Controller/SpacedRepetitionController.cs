@@ -30,12 +30,28 @@ public class SpacedRepetitionController : ControllerBase
 
     // TODO 1: map the result to response contract
     [AllowAnonymous]
-    [HttpGet("api/spaced-repetition/GetLearningDeck")]
-    public async Task<IActionResult> GetLearningDeckAsync([FromQuery] long userId, CancellationToken token = default)
+    [HttpGet("api/spaced-repetition/GetLearningDeck/{userId}")]
+    public async Task<IActionResult> GetLearningDeckAsync([FromRoute] long userId, CancellationToken token = default)
     {
-        var result = await _spacedRepetitionService.GetLearningDeckAsync(userId, token);
-        return Ok(result);
+        try
+        {
+            var result = await _spacedRepetitionService.GetLearningDeckAsync(userId, token);
+            
+            if (result == null || !result.Any())
+            {
+                return NotFound($"No learning deck found for userId: {userId}");
+            }
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error fetching learning deck: {ex.Message}");
+            
+            return StatusCode(500, "An error occurred while fetching the learning deck. Please try again later.");
+        }
     }
+
 
     [AllowAnonymous]
     [HttpGet("api/spaced-repetition/ShowQuestionAnswer")]
