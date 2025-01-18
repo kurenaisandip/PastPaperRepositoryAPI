@@ -22,9 +22,9 @@ public class SpacedRepetitionService : ISpacedRepetitionService
         return _spacedRepetitionRepository.GetLearningDeckAsync(userId, token);
     }
 
-    public Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(string pastPaperId, long userId,
+    public Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(long userId, string pastPaperId,
         CancellationToken token = default)
     {
-        return _spacedRepetitionRepository.ShowQuestionAnswerAsync(pastPaperId, userId, token);
+        return _spacedRepetitionRepository.ShowQuestionAnswerAsync(userId, pastPaperId, token);
     }
 }

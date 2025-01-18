@@ -78,7 +78,7 @@ public class SpacedRepetitionRepository : ISpacedRepetitionRepository
         }
     }
 
-    public async Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(string userId, long pastPaperId,
+    public async Task<List<QuestionAnswers>> ShowQuestionAnswerAsync(long userId, string pastPaperId,
         CancellationToken token = default)
     {
         try
@@ -86,17 +86,10 @@ public class SpacedRepetitionRepository : ISpacedRepetitionRepository
             using (var connection = await _connectionFactory.CreateConnectionAsync(token))
             {
                 var sql = @"
-                SELECT
-                    q.Id,
-                    q.PastPaperId,
-                    q.QuestionNumber,
-                    q.Question,
-                    q.Answer
-                FROM LearningDeck ld
-                JOIN PastPapers p ON ld.PastPaperId = p.PastPaperId
-                JOIN QuestionAnswers q ON ld.PastPaperId = q.PastPaperId
-                WHERE ld.UserId = @UserId AND ld.PastPaperId = @PastPaperId
-                ORDER BY ld.Score, ld.NextReviewDate";
+               select distinct q.question_number, q.question, q.answer, ld.score
+FROM LearningDeck ld
+join QuestionAnswers as q on ld.pastpaperid = q.pastpaperid
+where ld.user_id = @UserId and ld.pastpaperid = @PastPaperId";
 
                 var result = await connection.QueryAsync<QuestionAnswers>(
                     new CommandDefinition(sql, new { UserId = userId, PastPaperId = pastPaperId },

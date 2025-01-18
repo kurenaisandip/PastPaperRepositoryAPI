@@ -54,11 +54,49 @@ public class SpacedRepetitionController : ControllerBase
 
 
     [AllowAnonymous]
-    [HttpGet("api/spaced-repetition/ShowQuestionAnswer")]
-    public async Task<IActionResult> ShowQuestionAnswerAsync([FromQuery] string pastPaperId, [FromQuery] long UserId,
+    [HttpGet("api/spaced-repetition/ShowQuestionAnswer/{pastPaperId}/{userId}")]
+    public async Task<IActionResult> ShowQuestionAnswerAsync(
+        [FromRoute] string pastPaperId,
+        [FromRoute] long userId,
         CancellationToken token = default)
     {
-        var result = await _spacedRepetitionService.ShowQuestionAnswerAsync(pastPaperId, UserId, token);
-        return Ok(result);
+        try
+        {
+            // Validate inputs
+            if (string.IsNullOrEmpty(pastPaperId))
+            {
+                return BadRequest("PastPaperId cannot be null or empty.");
+            }
+
+            if (userId <= 0)
+            {
+                return BadRequest("UserId must be a positive number.");
+            }
+
+            // Call the service to get the question and answer data
+            var result = await _spacedRepetitionService.ShowQuestionAnswerAsync(userId, pastPaperId, token);
+
+            // Check if result is null or empty
+            if (result == null || !result.Any())
+            {
+                return NotFound($"No data found for pastPaperId: {pastPaperId} and userId: {userId}");
+            }
+
+            return Ok(result);
+        }
+        catch (OperationCanceledException)
+        {
+            // Handle request cancellation
+            return StatusCode(499, "The request was canceled.");
+        }
+        catch (Exception ex)
+        {
+            // Log the exception (replace with your logging mechanism)
+            Console.Error.WriteLine($"Error in ShowQuestionAnswerAsync: {ex.Message}");
+
+            // Return a generic error message
+            return StatusCode(500, "An error occurred while processing your request. Please try again later.");
+        }
     }
+
 }
