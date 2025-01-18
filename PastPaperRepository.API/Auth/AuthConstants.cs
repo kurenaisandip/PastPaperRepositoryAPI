@@ -8,4 +8,5 @@ public static class AuthConstants
     public const string TrustedMemberClaimName = "trusted_member";
     public const string UserPolicyName = "User";
     public const string UserClaimName = "User";
+    public const string Role = "role";
 }
