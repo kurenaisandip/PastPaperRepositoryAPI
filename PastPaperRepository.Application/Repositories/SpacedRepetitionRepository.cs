@@ -62,7 +62,7 @@ public class SpacedRepetitionRepository : ISpacedRepetitionRepository
                 FROM LearningDeck ld
                 JOIN PastPapers p ON ld.PastPaperId = p.PastPaperId
                 JOIN QuestionAnswers q ON ld.PastPaperId = q.PastPaperId
-                WHERE ld.UserId = @UserId
+                WHERE ld.user_id = @UserId
                 GROUP BY p.PastPaperId, p.Title";
 
                 var result =
