@@ -6,7 +6,7 @@ public interface IPastPaperService
 {
     Task<bool> CreatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default);
 
-    Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, string? userId = default,
+    Task<IEnumerable<QuestionAnswer>> GetPastPaperByIdAsync(string pastPaperId, string? userId = default,
         CancellationToken token = default);
 
     Task<PastPapers?> GetPastPaperBySlugAsync(string slug, CancellationToken token = default);

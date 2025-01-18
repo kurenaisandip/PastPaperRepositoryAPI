@@ -67,20 +67,20 @@ public class PastPaperRepository : IPastPaperRepository
         }
     }
 
-    public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, CancellationToken token = default)
+    public async Task<IEnumerable<QuestionAnswer>?> GetPastPaperByIdAsync(string pastpaperid, CancellationToken token = default)
     {
         using (var connection = await _connectionFactory.CreateConnectionAsync(token))
         {
-            var pastPaper = await connection.QuerySingleOrDefaultAsync<PastPapers>(new CommandDefinition(@"
-                select * from PastPapers where PastPaperId = @pastPaperId", new { pastPaperId },
+            // var pastPaper = await connection.QuerySingleOrDefaultAsync<PastPapers>(new CommandDefinition(@"
+            //     select * from PastPapers where PastPaperId = @pastPaperId", new { pastPaperId },
+            //     cancellationToken: token));
+            //
+            var pastPapers = await connection.QueryAsync<QuestionAnswer>(new CommandDefinition(@"
+                select question_number as id, question, answer from QuestionAnswers where pastpaperid = @pastpaperid order by question_number", new { pastpaperid },
                 cancellationToken: token));
 
-            // if (pastPaper is null)
-            // {
-            //     return null;
-            // }
 
-            return pastPaper; // this will return null if the pastPaper is null
+            return pastPapers; 
         }
     }
 

@@ -5,7 +5,7 @@ namespace PastPaperRepository.Application.Repositories;
 public interface IPastPaperRepository
 {
     Task<bool> CreatePastPaperAsync(PastPapers pastPapers, CancellationToken token = default);
-    Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, CancellationToken token = default);
+    Task<IEnumerable<QuestionAnswer>?> GetPastPaperByIdAsync(string pastPaperId, CancellationToken token = default);
     Task<PastPapers?> GetPastPaperBySlugAsync(string slug, CancellationToken token = default);
 
     Task<IEnumerable<PastPapers>> GetAllPastPapersAsync(GetAllPastPapersOptions options,

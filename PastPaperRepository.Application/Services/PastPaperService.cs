@@ -25,7 +25,7 @@ public class PastPaperService : IPastPaperService
         return await _pastPaperRepository.CreatePastPaperAsync(pastPapers, token);
     }
 
-    public async Task<PastPapers?> GetPastPaperByIdAsync(string pastPaperId, string? userId = default,
+    public async Task<IEnumerable<QuestionAnswer>> GetPastPaperByIdAsync(string pastPaperId, string? userId = default,
         CancellationToken token = default)
     {
         return await _pastPaperRepository.GetPastPaperByIdAsync(pastPaperId, token);

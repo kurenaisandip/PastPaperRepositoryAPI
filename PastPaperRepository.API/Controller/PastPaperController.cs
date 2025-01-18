@@ -47,9 +47,8 @@ public class PastPaperController : ControllerBase
         var pastPaper = await _pastPaperService.GetPastPaperByIdAsync(id, userId, token);
 
         if (pastPaper is null) return NotFound();
-
-        var response = pastPaper.MapToResponsePastPaper();
-        return Ok(response);
+        
+        return Ok(pastPaper);
     }
 
     [ResponseCache(Duration = 30, VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any)]
@@ -110,7 +109,6 @@ public class PastPaperController : ControllerBase
     }
 
     [AllowAnonymous]
-    // [Authorize(AuthConstants.UserPolicyName)]
     [HttpGet(ApiEndPoints.PastPaper.DynamicModal)]
     public async Task<IActionResult> DynamicModal([FromRoute] int id, CancellationToken token)
     {

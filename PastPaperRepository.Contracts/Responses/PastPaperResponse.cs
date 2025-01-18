@@ -14,3 +14,10 @@ public class PastPaperResponse
     public string ExamBoard { get; init; }
     public string FilePath { get; init; }
 }
+
+public class QuestionAnswerResponse
+{
+    public int Id { get; init; }
+    public string Question { get; init; }
+    public string Answer { get; init; }
+}
