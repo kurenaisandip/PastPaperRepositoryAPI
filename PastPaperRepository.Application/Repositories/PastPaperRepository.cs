@@ -76,10 +76,9 @@ public class PastPaperRepository : IPastPaperRepository
             //     cancellationToken: token));
             //
             var pastPapers = await connection.QueryAsync<QuestionAnswer>(new CommandDefinition(@"
-                select question_number as id, question, answer from QuestionAnswers where pastpaperid = @pastpaperid order by question_number", new { pastpaperid },
+                select question_number as id, pastpaperid as pastPaperId, question, answer from QuestionAnswers where pastpaperid = @pastpaperid order by question_number", new { pastpaperid },
                 cancellationToken: token));
-
-
+            
             return pastPapers; 
         }
     }
