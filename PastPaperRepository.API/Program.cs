@@ -79,7 +79,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(_defaultCorsPolicyName,
         policy =>
         {
-            policy.WithOrigins("http://127.0.0.1:5500")
+            policy.WithOrigins("")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -112,7 +112,7 @@ builder.Services.AddAuthorization(x =>
 {
     x.AddPolicy(AuthConstants.AdminUserPolicyName,
         policy => policy.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
-    x.AddPolicy(AuthConstants.UserPolicyName,
+    x.AddPolicy(AuthConstants.Role,
         policy => policy.RequireClaim("role", "User"));
 
 
@@ -253,6 +253,16 @@ app.UseHttpsRedirection();
 
 // Apply CORS middleware
 app.UseCors(_defaultCorsPolicyName);
+
+app.Use(async (context, next) =>
+{
+    var userClaims = context.User.Claims;
+    foreach (var claim in userClaims)
+    {
+        Console.WriteLine($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+    }
+    await next();
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
