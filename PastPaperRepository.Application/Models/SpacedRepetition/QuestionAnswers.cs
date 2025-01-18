@@ -2,9 +2,10 @@
 
 public class QuestionAnswers
 {
-    public long Id { get; set; }
-    public string PastPaperId { get; set; }
-    public int QuestionNumber { get; set; }
-    public string Question { get; set; }
-    public string Answer { get; set; }
+    // public long Id { get; set; }
+    // public string PastPaperId { get; set; }
+    public int question_number { get; set; }
+    public string question { get; set; }
+    public string answer { get; set; }
+    public int score { get; set; }
 }
