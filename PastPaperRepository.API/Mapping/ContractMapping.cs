@@ -37,6 +37,16 @@ public static class ContractMapping
             }).ToList()
         };
     }
+    
+    public static QuestionAnswerResponse MapToResponseQuestionAnswer(this QuestionAnswer pastPaper)
+    {
+        return new QuestionAnswerResponse
+        {
+            Id = pastPaper.id,
+            Question = pastPaper.question,
+            Answer = pastPaper.answer
+        };
+    }
 
     public static PastPaperResponse MapToResponsePastPaper(this PastPapers pastPaper)
     {
