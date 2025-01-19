@@ -68,4 +68,9 @@ public class PastPaperService : IPastPaperService
     {
         return _pastPaperRepository.GetDynamicPastPapersAsync(id, token);
     }
+
+    public Task<IEnumerable<SearchPastPaper>> SearchPastPapersAsync(string title, CancellationToken token = default)
+    {
+        return _pastPaperRepository.SearchPastPapersAsync(title, token);
+    }
 }

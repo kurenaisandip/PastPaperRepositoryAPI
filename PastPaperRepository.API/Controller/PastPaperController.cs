@@ -115,4 +115,11 @@ public class PastPaperController : ControllerBase
         var result = await _pastPaperService.GetDynamicPastPapersAsync(id, token);
         return Ok(result);
     }
+    
+    [HttpGet("api/search/{title}")]
+    public async Task<IActionResult> SearchPastPapers([FromRoute] string title, CancellationToken token)
+    {
+        var result = await _pastPaperService.SearchPastPapersAsync(title, token);
+        return Ok(result);
+    }
 }

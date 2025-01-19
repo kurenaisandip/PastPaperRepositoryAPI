@@ -243,4 +243,26 @@ WHERE l.user_id = @id;
             }
         }
     }
+
+    public async Task<IEnumerable<SearchPastPaper>> SearchPastPapersAsync(string title, CancellationToken token = default)
+    {
+        using (var connection = await _connectionFactory.CreateConnectionAsync(token))
+        {
+            var query = @"
+        SELECT
+            PastPaperId AS pastPaperId,
+            Title AS title,
+            ExamType AS ExamType,
+            DifficultyLevel AS difficultyLevel,
+            Year AS year
+        FROM PastPapers
+        WHERE LOWER(Title) LIKE '%' || LOWER(@Title) || '%'";
+
+
+            var parameters = new { Title = title };
+            var result = await connection.QueryAsync<SearchPastPaper>(new CommandDefinition(query, parameters, cancellationToken: token));
+            return result;
+        }
+
+    }
 }
