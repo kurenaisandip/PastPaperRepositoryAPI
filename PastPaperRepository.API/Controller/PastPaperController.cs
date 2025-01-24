@@ -66,7 +66,7 @@ public class PastPaperController : ControllerBase
         return Ok(response);
     }
 
-    [ResponseCache(Duration = 30, VaryByQueryKeys = new[] { "Title", "year", "sortBy", "page", "pageSize" },
+    [ResponseCache(Duration = 30, VaryByQueryKeys = new[] { "Title", "year", "sortBy"},
         VaryByHeader = "Accept-Encoding", Location = ResponseCacheLocation.Any)]
     [HttpGet(ApiEndPoints.PastPaper.GetAll)]
     public async Task<IActionResult> GetAllPastPapers([FromQuery] GetAllPastPapersRequest request,
@@ -116,6 +116,8 @@ public class PastPaperController : ControllerBase
         return Ok(result);
     }
     
+    // [Authorize(Policy = AuthConstants.Role)]
+       [Authorize]
     [HttpGet("api/search/{title}")]
     public async Task<IActionResult> SearchPastPapers([FromRoute] string title, CancellationToken token)
     {

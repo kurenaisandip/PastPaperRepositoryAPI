@@ -49,14 +49,16 @@ public class LoginController : ControllerBase
             new("userType", userData.UserType),
             new("isUserDataComplete", boolvalue.ToString())
         };
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretKeyForAuthenticationOfApplication"));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        var Sectoken = new JwtSecurityToken(_config["Jwt:Issuer"],
-            _config["Jwt:Audience"],
-            claims,
-            expires: DateTime.Now.AddMinutes(120),
-            signingCredentials: credentials);
+        var Sectoken = new JwtSecurityToken(
+            issuer: _config["Jwt:Issuer"],
+            audience: _config["Jwt:Audience"],
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(120), // Token expires in 2 hours
+            signingCredentials: credentials
+        );
 
         var token = new JwtSecurityTokenHandler().WriteToken(Sectoken);
 

@@ -79,7 +79,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(_defaultCorsPolicyName,
         policy =>
         {
-            policy.WithOrigins("")
+            // policy.WithOrigins("http://localhost:3000")
+            policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -98,7 +99,7 @@ builder.Services.AddAuthentication(x =>
     x.TokenValidationParameters = new TokenValidationParameters
     {
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+            Encoding.UTF8.GetBytes("YourSecretKeyForAuthenticationOfApplication")),
         ValidateIssuerSigningKey = true,
         ValidateLifetime = true,
         ValidateAudience = true,
@@ -106,23 +107,43 @@ builder.Services.AddAuthentication(x =>
         ValidAudience = jwtAudience,
         ValidIssuer = jwtIssuer
     };
+
+    x.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine("Authentication failed: " + context.Exception.Message);
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("Token validated successfully.");
+            return Task.CompletedTask;
+        }
+    };
 });
 
-builder.Services.AddAuthorization(x =>
-{
-    x.AddPolicy(AuthConstants.AdminUserPolicyName,
-        policy => policy.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
-    x.AddPolicy(AuthConstants.Role,
-        policy => policy.RequireClaim("role", "User"));
+// builder.Services.AddAuthorization(x =>
+// {
+//     x.AddPolicy("TestPolicy", policy => policy.RequireAuthenticatedUser());
+// });
 
-
-    x.AddPolicy(AuthConstants.TrustedMemberPolicyName,
-        policy => policy.RequireAssertion(context =>
-            context.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" }) ||
-            context.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" }) ||
-            context.User.HasClaim(m => m is { Type: "role", Value: "User" }) 
-        ));
-});
+builder.Services.AddAuthorization();
+// builder.Services.AddAuthorization(x =>
+// {
+//     // x.AddPolicy(AuthConstants.AdminUserPolicyName,
+//     //     policy => policy.RequireClaim(AuthConstants.AdminUserClaimName, "true"));
+//     x.AddPolicy(AuthConstants.Role,
+//         policy => policy.RequireClaim("role", new[] { "User", "Admin" }));
+//
+//
+//     // x.AddPolicy(AuthConstants.TrustedMemberPolicyName,
+//     //     policy => policy.RequireAssertion(context =>
+//     //         context.User.HasClaim(m => m is { Type: AuthConstants.AdminUserClaimName, Value: "true" }) ||
+//     //         context.User.HasClaim(m => m is { Type: AuthConstants.TrustedMemberClaimName, Value: "true" }) ||
+//     //         context.User.HasClaim(m => m is { Type: "role", Value: "User" }) 
+//     //     ));
+// });
 
 // Application and Database setup
 builder.Services.AddApplication();
@@ -254,6 +275,9 @@ app.UseHttpsRedirection();
 // Apply CORS middleware
 app.UseCors(_defaultCorsPolicyName);
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.Use(async (context, next) =>
 {
     var userClaims = context.User.Claims;
@@ -264,8 +288,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.UseAuthentication();
-app.UseAuthorization();
+
 
 app.UseResponseCaching();
 
